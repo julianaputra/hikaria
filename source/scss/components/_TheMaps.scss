@@ -1,0 +1,70 @@
+@use '../config' as *;
+@use 'sass:color';
+
+.maps {
+    @include vwUnit(padding, 125 0, 80 0);
+    &__holder {
+        position: relative;
+    }
+    &__container {
+        @include vwUnit(height, 768, 500);
+        width: 100%;
+    }
+    &__sidebar {
+        position: absolute;
+        top: 0;
+        right: 0;
+        @include vwUnit(max-width, 530, 400);
+        height: 100%;
+        background: color(white);
+        @include vwUnit(padding, 15);
+        display: none;
+        z-index: 999;
+        overflow: auto;
+    }
+    &__close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        height: 35px;
+        width: 35px;
+        background-color: color(green);
+        border-radius: 50%;
+        border: none;
+        font-size: 25px;
+        line-height: 1;
+    }
+    &__image {
+        border-radius: 8px;
+        width: 100%;
+        height: auto;
+    }
+    &__text {
+        @include vwUnit(padding, 20);
+    }
+    &__title {
+        @include typo(h4);
+        text-transform: uppercase;
+        color: color(black);
+        letter-spacing: 2px;
+        text-align: left;
+        @include vwUnit(margin-bottom, 10);
+    }
+    &__desc {
+        @include typo(paragraph-md);
+        color: color(black);
+        text-align: left;
+    }
+}
+
+// .popup-right .leaflet-popup-content-wrapper {
+//   border-radius: 8px;
+//   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+//   background-color: #fff;
+//   width: 240px;
+// }
+
+// .popup-right .leaflet-popup-tip {
+//   left: -12px !important;
+//   right: auto;
+// }

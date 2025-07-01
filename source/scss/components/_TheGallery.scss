@@ -1,0 +1,54 @@
+@use '../config' as *;
+@use 'sass:color';
+
+@import '@fancyapps/ui/dist/fancybox/fancybox.css';
+
+.gallery {
+    @include vwUnit(padding, 125 0, 80 0);
+    @include imageRatio(390 390, $objectFit: cover, $className: 'small');
+    @include imageRatio(810 810, $objectFit: cover, $className: 'big');
+    &__grid-custom {
+        display: flex;
+        flex-wrap: wrap;
+        @include vwUnit(margin, 0 -10);
+    }
+    &__grid-item {
+        &:hover {
+            .gallery__image {
+                transform: scale(1.2);
+                @include transition(0.5s);
+                opacity: 0.4;
+            }
+        }
+        .gallery__image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            @include transition(0.5s);
+        }
+        &.small {
+            width: 50%;
+            @include vwUnit(padding, 0 10);
+            @include vwUnit(margin-bottom, 20);
+        }
+    }
+    &__small-container,
+    &__big-container {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    &__video-btn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        img {
+            @include vwUnit(height, 112);
+            @include vwUnit(width, 112);
+        }
+    }
+    .big {
+        @include vwUnit(margin-bottom, 20);
+    } 
+}

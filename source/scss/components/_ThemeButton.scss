@@ -1,0 +1,26 @@
+@use '../config' as *;
+@use 'sass:color';
+
+.themeBtn {
+    display: inline-block;
+    position: relative;
+    @include vwUnit('padding', 15 20);
+    @include typo(paragraph-sm);
+    font-weight: 400;
+    background: linear-gradient(color(green));
+    border-radius: 6px;
+    border: 0;
+    outline: 0;
+    color: color(black);
+    text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    transition: linear 0.5s ease;
+    letter-spacing: 1px;
+    overflow: hidden;
+
+    &:hover {
+        background: linear-gradient(90deg, #178DDD -23.96%, #34F461 100%);
+        transition: linear 0.5s ease;
+    }
+}

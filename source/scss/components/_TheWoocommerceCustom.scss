@@ -1,0 +1,580 @@
+@use '../config' as *;
+@use 'sass:color';
+
+.product {
+    @include vwUnit(padding, 100 0);
+    display: flex;
+    justify-content: space-between;
+    &__row {
+        justify-content: space-between;
+    }
+    .woocommerce-product-gallery {
+        flex: 0 0 auto;
+        width: 41.66666667%;
+    }
+    .zoomtoo-container {
+        @include vwUnit(height, 480);
+        border-radius: 10px;
+    }
+    .entry-summary {
+        flex: 0 0 auto;
+        width: 50%;
+    }
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .wp-post-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .wpgs-nav .slick-slide {
+        aspect-ratio: 1/1;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .wpgs-nav .slick-current {
+        border: 3px solid color(green);
+    }
+
+    // product description
+    .product_title {
+        @include typo(h3);
+        text-transform: uppercase;
+        color: color(white);
+        @include vwUnit(margin-bottom, 40);
+    }
+    .price,
+    .product_meta,
+    .single_add_to_cart_button {
+        display: none;
+    }
+}
+
+.booking-form {
+    &__date {
+        @include vwUnit(margin-bottom, 30);
+    }
+    label {
+        @include typo(paragraph-sm);
+        color: color(white);
+        text-transform: uppercase;
+        display: block;
+        letter-spacing: 1px;
+        @include vwUnit(margin-bottom, 15);
+    }
+    .input-group {
+        gap: 15px;
+        input {
+            width: 80%;
+        }
+        .input-group-text {
+            border-radius: 6px!important;
+            background-color: color(green);
+            border-color: color(green);
+        }
+        .form-control__icon {
+            height: 25px;
+        }
+    }
+    .form-control {
+        width: 100%;
+        @include vwUnit(height, 60);
+        border-radius: 6px!important;
+        background-color: transparent;
+        border-color: color(neutral, 500);
+        color: color(neutral, 400);
+    }
+}
+
+.ticket-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.ticket-group {
+    &__title {
+        color: color(white);
+        @include typo(paragraph-sm);
+        font-weight: 700;
+        background: rgba(255, 255, 255, 0.05);
+        @include vwUnit(padding, 16 20);
+        border-radius: 6px;
+        letter-spacing: 1px;
+    }
+}
+.ticket-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    @include vwUnit(padding, 22 20);
+    &:last-child {
+        border-bottom: none;
+    }
+}
+.ticket-label {
+    color: color(white);
+    @include typo(paragraph-sm);
+    font-weight: 400;
+    flex: 1;
+}
+.ticket-label .ticket-sub {
+    font-size: 12px;
+    color: #aaa;
+    margin-left: 4px;
+}
+.ticket-price {
+    @include vwUnit(padding-right, 30);
+    @include vwUnit(width, 120);
+    @include typo(paragraph-sm);
+    text-align: right;
+    color: color(white);
+    letter-spacing: 1px;
+}
+.ticket-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    button {
+        @include vwUnit(width, 45);
+        @include vwUnit(height, 45);
+        background-color: color(white);
+        color: color(black);
+        @include typo(paragraph-sm);
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    input {
+        @include vwUnit(width, 40);
+        @include typo(paragraph-xs);
+        font-weight: 700;
+        border: none;
+        background: transparent;
+        color: color(white);
+    }
+}
+.ticket-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 6px;
+    width: 100%;
+    @include vwUnit(margin-top, 15);
+    color: color(white);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    @include vwUnit(padding, 22 20);
+    background-color: rgba(255, 255, 255, 0.05);
+    &__title {
+        width: 60%;
+    }
+}
+.dynamic-price {
+    text-align: right;
+    font-weight: 700;
+    @include typo(paragraph-sm);
+    @include vwUnit(padding-right, 30);
+    @include vwUnit(width, 120);
+}
+
+// DEFAULT WOOCOMMERCE
+.woocommerce-section {
+    @include vwUnit(padding, 50 0 70 0);
+    @include vwUnit(margin-bottom, 40);
+    border-bottom: 1px solid #3F3F46;
+    text-align: center;
+    &__title {
+        @include typo(h1);
+        background: linear-gradient(90deg, #34F461 0%, #178DDD 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-align: center;
+        @include vwUnit(margin-bottom, 20);
+    }
+    &__subtitle {
+        text-align: center;
+        @include typo(paragraph-sm);
+        color: color(white);
+        width: 60%;
+        font-weight: 400;
+        display: inline-block;
+    }
+}
+
+// CHECKOUT
+.checkout-page {
+    // @include vwUnit(padding, 100 0);
+    &__title {
+        @include typo(h4);
+        text-transform: uppercase;
+        font-weight: 500;
+        letter-spacing: 1px;
+        @include vwUnit(margin-bottom, 30);
+    }
+    .form-row {
+        @include vwUnit(margin-bottom, 30);
+    }
+    label {
+        display: block;
+        @include typo(paragraph-sm);
+        text-transform: uppercase;
+        @include vwUnit(margin-bottom, 15);
+    }
+    input {
+        width: 100%;
+        @include vwUnit(height, 60);
+        border-radius: 6px!important;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid color(neutral, 500);
+        color: color(neutral, 400);
+        @include vwUnit(padding, 15);
+    }
+    .woocommerce-checkout-payment {
+        display: none;
+    }
+    .image-col {
+        img {
+            @include vwUnit(width, 100);
+        }
+    }
+}
+.checkout {
+    color: color(white);
+    @include vwUnit(margin-top, 70);
+}
+.checkout-term {
+    border-top: 1px solid color(neutral, 700);
+    @include vwUnit(margin-top, 50);
+    @include vwUnit(padding-top, 30);
+    &__label {
+        position: relative;
+        @include vwUnit(padding-left, 35);
+        @include vwUnit(margin-bottom, 70);
+        display: block;
+        &:before {
+            content: '';
+            background-image: url('../../assets/images/check.svg');
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            @include vwUnit(height, 24);
+            @include vwUnit(width, 24);
+            position: absolute;
+            top: 2px;
+            left: 0;
+        }
+        a {
+            color: color(green);
+        }
+    }
+}
+.custom-checkout-button {
+    display: flex;
+    gap: 15px;
+    .themeBtn {
+        @include vwUnit(padding, 30 40);
+        font-weight: 700;
+    }
+}
+.back-booking.themeBtn {
+    @include vwUnit(padding, 30 40 30 70);
+    letter-spacing: 0;
+    background: transparent;
+    border: 1px solid color(white);
+    color: color(white);
+    @include transition(0.5s);
+    position: relative;
+    &:before {
+        content: '';
+        background-image: url('../../assets/images/button-arrow.svg');
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        @include vwUnit(height, 30);
+        @include vwUnit(width, 30);
+        position: absolute;
+        top: 50%;
+        @include vwUnit(left, 30);
+        transform: translateY(-50%);
+    }
+    &:hover {
+        @include transition(0.5s);
+    }
+}
+
+.section-order-summary {
+    background: #020F2680;
+    @include vwUnit(padding, 20);
+    @include typo(paragraph-sm);
+    text-transform: uppercase;
+    border-radius: 6px;
+}
+
+.referral-code {
+    @include vwUnit(padding, 30 15 0 15);
+    &__title {
+        @include typo(paragraph-sm);
+        text-transform: uppercase;
+        color: color(white);
+    }
+    .checkout_coupon {
+        display: block!important;
+    }
+    .form-row {
+        display: flex;
+        gap: 15px;
+        @include vwUnit(margin-bottom, 0);
+    }
+    .button {
+        @include vwUnit(padding, 10 50);
+        @include typo(paragraph-sm);
+        text-transform: uppercase;
+        border-radius: 6px;
+        background-color: color(white);
+    }
+}
+.shop_table {
+    width: 100%;
+    .custom-cart-item {
+        align-items: center;
+        border-bottom: 1px solid color(neutral, 700);
+    }
+    .image-col,
+    .info-col,
+    .price-col {
+        @include vwUnit(padding, 30 15);
+    }
+    .image-col {
+        width: 20%;
+        img {
+            aspect-ratio: 1/1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+    .info-col {
+        width: 60%;
+        &__title {
+            @include typo(paragraph-sm);
+            font-weight: 600;
+            letter-spacing: 1px;
+            @include vwUnit(margin-bottom, 10);
+        }
+        &__date,
+        &__customer {
+            @include vwUnit(margin-bottom, 5);
+            @include typo(paragraph-sm);
+        }
+    }
+    .price-col {
+        width: 20%;
+    }
+    .cart-subtotal,
+    .order-total,
+    .cart-discount {
+        border-bottom: 1px solid color(neutral, 700);
+        th,
+        td {
+            @include vwUnit(padding, 30 15);
+        }
+        th {
+            @include typo(paragraph-sm);
+            text-transform: uppercase;
+            font-weight: 400;
+            letter-spacing: 2px;
+        }
+    }
+    .order-total {
+        th {
+            font-weight: 700;
+        }
+    }
+}
+.woocommerce-message {
+    display: none;
+}
+.woocommerce-remove-coupon {
+    color: color(green);
+}
+
+// PAGE ON PAYMENT METHOD 
+.order_payments-method {
+    @include vwUnit(padding-left, 0);
+    @include vwUnit(margin, 70 0);
+    display: flex;
+    gap: 40px;
+    li {
+        list-style: none;
+        color: color(white);
+        font-weight: 600;
+        letter-spacing: 1px;
+        strong {
+            display: block;
+            font-weight: 400;
+            color: color(neutral, 400);
+            letter-spacing: 0;
+            @include vwUnit(margin-top, 10);
+        }
+    }
+}
+
+#pay-button {
+    color: color(green);
+}
+
+// THANK YOU
+.woocommerce-thankyou-order-received {
+    display: none;
+}
+.thank-you {
+    .woocommerce-thankyou-order-details {
+        @include vwUnit(padding-left, 0);
+        @include vwUnit(margin, 70 0);
+        display: flex;
+        gap: 40px;
+        li {
+            list-style: none;
+            color: color(white);
+            font-weight: 600;
+            letter-spacing: 1px;
+            strong {
+                display: block;
+                font-weight: 400;
+                color: color(neutral, 400);
+                letter-spacing: 0;
+                @include vwUnit(margin-top, 10);
+            }
+        }
+    }
+    h2 {
+        @include typo(h4);
+        color: color(white);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+}
+.woocommerce-order-details {
+    @include vwUnit(margin-bottom, 70);
+    &__title {
+        color: color(white);
+        @include typo(h4);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        @include vwUnit(margin-bottom, 30);
+    }
+    .woocommerce-table {
+        thead  {
+            tr {
+                background: #020F2680;
+                border-radius: 6px;
+            }
+            th {
+                @include vwUnit(padding, 20);
+                @include typo(paragraph-sm);
+                text-transform: uppercase;
+                color: color(white);
+            }
+            .product-total {
+                text-align: right;
+            }
+        }
+        tbody {
+            td {
+                @include vwUnit(padding, 15);
+            }
+            
+            a {
+                color: color(white);
+                text-decoration: none;
+                @include vwUnit(margin-bottom, 15);
+                display: block;
+                @include typo(paragraph-sm);
+            }
+            .product-quantity {
+                display: none;
+            }
+            ul {
+                @include vwUnit(padding-left, 0);
+                li {
+                    list-style: none;
+                    color: color(neutral, 400);
+                    @include typo(paragraph-sm);
+                    font-weight: 400;
+                    .wc-item-meta-label {
+                        display: none;
+                        font-weight: 400;
+                    }
+                    &:first-child {
+                        .wc-item-meta-label {
+                            display: inline-block;
+                        }
+                    }
+                    p {
+                        display: inline-block;
+                        @include vwUnit(margin-bottom, 5);
+                    }
+                }
+            }
+            .product-total {
+                color: color(white);
+                text-align: right;
+                @include typo(paragraph-sm);
+                letter-spacing: 1px;
+                font-weight: 600;
+            }
+        }
+        tfoot {
+            tr {
+                border-top: 1px solid color(neutral, 400);
+                border-bottom: 1px solid color(neutral, 400);
+            }
+            th {
+                @include vwUnit(padding, 15);
+                @include typo(paragraph-sm);
+                color: color(white);
+                font-weight: 400;
+                text-transform: uppercase;
+            }
+            td {
+                @include vwUnit(padding, 15);
+                @include typo(paragraph-sm);
+                color: color(white);
+                font-weight: 400;
+                text-align: right;
+                a {
+                    color: color(white);
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}
+.woocommerce-customer-details{
+    display: none;
+}
+.midtrans_payment_info {
+    tr {
+        border-bottom: 1px solid color(neutral, 400);
+    }
+    th {
+        @include vwUnit(padding, 15);
+        color: color(white);
+        @include typo(paragraph-sm);
+        text-transform: uppercase;
+        font-weight: 400;
+    }
+    td {
+        @include vwUnit(padding, 15);
+        text-align: right;
+        a {
+            color: color(green);
+            text-decoration: none;
+        }
+    }
+}

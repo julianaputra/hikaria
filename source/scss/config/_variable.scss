@@ -1,0 +1,233 @@
+@use 'sass:map';
+@use 'sass:math';
+
+// |‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾| //
+// | tmdrVar v.1.0.2                         | //
+// | last update : 03 / 04 / 2024            | //
+// |_________________________________________| //
+
+$themeUnit: 'vw';
+
+$desktopBreakpoints: (
+    1920,
+);
+
+$mobileBreakpoints: (
+    1199.98,
+    767,
+    480
+);
+
+// color example taken from Timedoor - Petrane Figma
+// https://www.figma.com/design/TAvIMAc18SOhop5Cs9he7t/Petrane?node-id=6-3&node-type=canvas&t=zFVBjA4RSoEmze7h-0
+
+$color: (
+    pumpkin: (
+        default: #F6871F,
+    ),
+    prussian-blue: (
+        default: #003559
+    ),
+    french-grey: (
+        default: #C5C4C9
+    ),
+    dutch-white: (
+        default: #FCE6C4
+    ),
+    anti-flash-white: (
+        default: #E9ECF1
+    ),
+    baby-powder: (
+        default: #F8F4FD
+    ),
+    body: (
+        default: #6A6A6A,
+        50: rgba(106, 106, 106, 0.5),
+    ),
+    pure-white: (
+        default: #FFFFFF,
+        50: rgba(255, 255, 255, 0.5)
+    ),
+    black: (
+        default: #000,
+    ),
+    light-grey: (
+        default: #FBFBFB
+    ),
+    error: (
+        default: #FF1818
+    ),
+
+    // brand color
+    white: (
+        default: #fff,
+    ),
+    green: (
+        default: #34F461,
+    ),
+    navy: (
+        default: #14294F,
+    ),
+    body-color: (
+        default: #CED0D4,
+    ),
+    mini-title: (
+        default: #6e6e6e,
+    ),
+
+    // neutral
+    neutral: (
+        default: #fafafa,
+        100: #f5f5f5,
+        200: #e5e5e5,
+        300: #d4d4d4,
+        400: #a3a3a3,
+        500: #737373,
+        600: #525252,
+        700: #404040,
+        800: #262626,
+        900: #171717,
+        950: #0a0a0a,
+    )
+);
+
+// OPTIONAL - if default using color shade
+
+// $variant: (
+//     blue: (
+//         default: map.get($color, blue, 80),
+//     )
+// );
+
+// $color: map.deep-merge($color, $variant);
+
+// OPTIONAL - end
+
+$fontSizes: (
+    display-1: (
+        desktop: (
+            font-size: 70,
+            font-weight: 800,
+            line-height: 1.1
+        ),
+        mobile: (
+            font-size: 40,
+            text-decoration: underline
+        ),
+        480:(
+            text-transform: uppercase
+        ),
+    ),
+    h1: (
+        desktop: (
+            font-size: 80,
+            line-height: 120%,
+            font-weight: 500,
+            letter-spacing: 2px
+        ),
+        mobile: (
+            font-size: 52,
+            line-height: 120%,
+            letter-spacing: 2px
+        )
+    ),
+    h2: (
+        desktop: (
+            font-size: 76,
+            line-height: 120%,
+            font-weight: 500,
+            letter-spacing: 2px
+        ),
+        mobile: (
+            font-size: 30,
+            line-height: 120%,
+        )
+    ),
+    h3: (
+        desktop: (
+            font-size: 46,
+            line-height: 120%,
+            letter-spacing: 2px
+        ),
+        mobile: (
+            font-size: 32,
+            line-height: 120%,
+            letter-spacing: 2px
+        )
+    ),
+    h4: (
+        desktop: (
+            font-size: 36,
+            line-height: 120%,
+        ),
+        mobile: (
+            font-size: 24,
+            line-height: 120%,
+        )
+    ),
+    h5: (
+        desktop: (
+            font-size: 24,
+            line-height: 120%,
+        ),
+    ),
+    paragraph-xl: (
+        desktop: (
+            font-size: 28,
+            line-height: 160%,
+        ),
+        mobile: (
+            font-size: 24,
+            line-height: 160%,
+        )
+    ),
+    paragraph-lg: (
+        desktop: (
+            font-size: 24,
+            line-height: 160%,
+        ),
+        mobile: (
+            
+        )
+    ),
+    paragraph-md: (
+        desktop: (
+            font-size: 20,
+            line-height: 160%,
+        ),
+        mobile: (
+            font-size: 18,
+            line-height: 160%,
+        )
+    ),
+    paragraph-sm: (
+        desktop: (
+            font-size: 18,
+            line-height: 160%,
+        ),
+        mobile: (
+            font-size: 16,
+            line-height: 160%,
+        )
+    ),
+    paragraph-xs: (
+        desktop: (
+            font-size: 16,
+            line-height: 160%,
+        ),
+        mobile: (
+            font-size: 14,
+            line-height: 160%,
+        )
+    ),
+    paragraph-xxs: (
+        desktop: (
+            font-size: 14,
+            line-height: 160%,
+        ),
+        mobile: (
+            font-size: 12,
+            line-height: 160%,
+        )
+    )
+);

@@ -1,0 +1,26 @@
+
+@use '../config' as *;
+@use 'sass:color';
+
+.section{
+    &__holder {
+        text-align: center;
+    }
+    &__title {
+        @include typo(h2);
+        font-weight: 500;
+        color: color(white);
+        text-transform: uppercase;
+        text-align: center;
+        @include vwUnit(margin-bottom, 30);
+    }
+    &__subtitle {
+        @include typo(paragraph-md);
+        color: color(mini-title);
+        font-weight: 400;
+        width: 34%;
+        text-align: center;
+        display: inline-block;
+        @include vwUnit(margin-bottom, 70);
+    }
+}

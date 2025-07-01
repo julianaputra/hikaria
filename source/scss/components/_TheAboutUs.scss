@@ -1,0 +1,39 @@
+@use '../config' as *;
+@use 'sass:color';
+
+.about-us {
+    @include vwUnit(padding, 125 0);
+    @include imageRatio(950 1110, $objectFit: cover, $className: 'big');
+    @include imageRatio(530 700, $objectFit: cover, $className: 'small');
+    @include imageRatio(252 55, $objectFit: cover, $className: 'tmdr');
+    @include imageRatio(252 55, $objectFit: cover, $className: 'rhs');
+    &__row {
+        justify-content: space-between;
+    }
+    &__big-container {
+        overflow: hidden;
+        border-radius: 10px;
+    }
+    &__title {
+        text-align: left;
+    }
+    &__desc {
+        @include typo(paragraph-md);
+        color: color(body-color);
+        font-weight: 400;
+        @include vwUnit(margin-bottom, 30);
+    }
+    &__logo {
+        display: flex;
+        gap: 30px;
+    }
+    &__tmdr-container,
+    &__rhs-container {
+        width: 50%;
+    }
+    &__small-container {
+        @include vwUnit(margin-top, 80);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+}

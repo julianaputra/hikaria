@@ -1,0 +1,64 @@
+@use '../config' as *;
+@use 'sass:color';
+
+.faq {
+    @include vwUnit(padding, 125 0);
+    &__row {
+        justify-content: space-between;
+    }
+    &__section-title,
+    &__section-subtitle {
+        text-align: left;
+        width: 100%;
+    }
+}
+.faq-accordion {
+    &__item {
+        background: #FFFFFF0D;
+        border-radius: 6px;
+        @include vwUnit(padding, 40);
+        @include vwUnit(margin-bottom, 30);
+        border: none;
+    }
+    &__header {
+        @include typo(paragraph-md);
+    }
+    &__button {
+        background-color: transparent!important;
+        border: none;
+        color: color(white)!important;
+        font-weight: 500;
+        padding: 0;
+        width: 100%;
+        text-align: left;
+        box-shadow: none!important;
+        &:not(.collapsed)::after,
+        &:after {
+            content: '';
+            background-image: url('../../../assets/images/chevron-down.svg');
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            height: 24px;
+            width: 24px;
+            position: absolute;
+            top: 5px;
+            right: 0;
+        }
+        &:not(.collapsed)::after {
+            transform: rotate(180deg);
+        }
+    }
+    &__body {
+        color: #CED0D4;
+        font-weight: 400;
+        @include typo(paragraph-md);
+        ol {
+            padding-left: 0;
+            li {
+                color: #CED0D4;
+                @include vwUnit(padding, 5 0);
+            }
+        }
+    }
+}

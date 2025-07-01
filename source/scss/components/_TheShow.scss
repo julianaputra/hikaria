@@ -1,0 +1,74 @@
+@use '../config' as *;
+@use 'sass:color';
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+
+.the-show {
+    @include vwUnit(padding, 250 0 125 0, 125 0 50 0);
+    @include imageRatio(950 800, $objectFit: cover);
+    &__image-container {
+        border-radius: 10px;
+        overflow: hidden;   
+        height: 100%;
+    }
+    &__text {
+        background-color: color(black);
+        height: 100%;
+        width: 100%;
+        text-align: left;
+        @include vwUnit(padding, 40);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border-radius: 10px;
+    }
+    &__title {
+        @include typo(h3);
+        color: color(white);
+        text-transform: uppercase;
+        font-weight: 400;
+    }
+    &__information {
+        display: flex;
+        flex-wrap: wrap;
+        @include vwUnit(padding-top, 25);
+        border-top: 1px solid #FFFFFF1A;
+    }
+    &__information-title {
+        color: color(mini-title);
+        @include vwUnit(margin-bottom, 20);
+        @include typo(paragraph-md);
+        font-weight: 400;
+    }
+    &__information-desc {
+        color: color(white);
+        @include typo(paragraph-md);
+        font-weight: 400;
+        a {
+            color: color(white);
+            text-decoration: none;
+            &:hover {
+                opacity: 0.5;
+            }
+        }
+    }
+    &__date-info,
+    &__time-info {
+        width: 50%;
+        @include vwUnit(margin-bottom, 10);
+    }
+    &__location-info {
+        @include vwUnit(padding-top, 20);
+        border-top: 1px solid #FFFFFF1A;
+    }
+    &__location-link {
+        color: color(green);
+        text-decoration: none;
+    }
+    .ticket-button {
+        width: 100%;
+        display: block;
+        @include vwUnit(margin-top, 10);
+    }
+}

@@ -1,0 +1,62 @@
+@use 'sass:map';
+@use 'sass:math';
+@use '_config.scss' as *;
+
+// font face
+@use '../../assets/fonts/_font-face.scss';
+
+
+// main Bootstrap Module
+@use 'config/_init-bootstrap.scss';
+
+// components
+@use 'components/TheNavbar';
+@use 'components/TheFooter';
+@use 'components/ThemeButton';
+@use 'components/TheWoocommerceCustom';
+
+
+// |‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾| //
+// | Timedoor New Standard                   | //
+// |_________________________________________| //
+
+/* root font-size variable -- start */
+:root {
+    @include fontVar();
+}
+/* root font-size variable -- end */
+
+/* create font-size class -- start */
+@include printFontClass();
+/* create font-size class -- end */
+
+/* ratio-item class -- start */
+.ratio-item {
+    @extend %ratioItem;
+}
+/* ratio-item class -- end */
+
+// |‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾| //
+// | CUSTOM CODE START HERE                  | //
+// |_________________________________________| //
+
+// this code is only example, you can delete the code here
+body {
+    font-family: "Aspekta";
+    position: relative;
+    background-color: #000000; 
+    &:before {
+        content: '';
+        background: linear-gradient(90deg, rgba(20, 41, 79, 0) 0%, rgba(20, 41, 79, 0.7) 100%);
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: -1;
+    }
+}
+
+.grecaptcha-badge { 
+    visibility: hidden;
+}

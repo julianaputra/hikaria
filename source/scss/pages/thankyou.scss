@@ -1,0 +1,39 @@
+@use 'sass:math';
+@use '../_config.scss' as *;
+
+.thankyou {
+    @include vwUnit('padding', 150 0, 60 0);
+    text-align: center;
+
+    &__subtitle {
+        @include vwUnit('margin-bottom', 24, 20);
+        @include vwUnit('font-size', 80, 60);
+        font-weight: 400;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+    }
+
+    &__description {
+        @include vwUnit('margin-bottom', 48, 30);
+        @include vwUnit('font-size', 20, 18);
+        font-weight: 400;
+        line-height: 1.6;
+    }
+
+    &__link {
+        display: inline-flex;
+        @include vwUnit('font-size', 18, 16);
+        font-weight: 700;
+        line-height: 1;
+        color: currentColor;
+        text-decoration: none;
+        justify-content: center;
+        align-items: center;
+        @include vwUnit('gap', 10, 10);
+
+        svg {
+            @include vwUnit('width', 24, 24);
+            @include vwUnit('height', 24, 24);
+        }
+    }
+}

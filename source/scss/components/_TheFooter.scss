@@ -1,0 +1,152 @@
+@use '../config' as *;
+@use 'sass:color';
+
+.footer {
+    @include imageRatio(280 60, false, true, contain, 'logo');
+    background-color: color(black);
+    color: #fff;
+    position: relative;
+    z-index: 1;
+    &:before {
+        content: '';
+        background: linear-gradient(90deg, rgba(20, 41, 79, 0) 0%, rgba(20, 41, 79, 0.7) 100%);
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: -1;
+    }
+    &:after {
+        content: '';
+        background-image: url('../../assets/images/vector-footer.svg');
+        background-position: bottom;
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: -1;
+    }
+
+    &__top {
+        @include vwUnit('padding', 180 0 80 0, 40 0 20 0);
+    }
+
+    &__bottom {
+        @include vwUnit('padding', 25 0, 20 0);
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__social-wrapper {
+        display: flex;
+        @include vwUnit('gap', 16, 16);
+        @include vwUnit('margin-top', 40, 25);
+
+        @include vwMobile('margin-bottom', 40);
+    }
+
+    &__social-item {
+        border-radius: 8px;
+        background-color: transparent;
+        border: 1px solid color(mini-title);
+        @include vwUnit('width', 64, 64);
+        @include vwUnit('height', 64, 64);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 0.3s;
+
+        div {
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            background-color: color(white);
+            @include vwUnit('width', 24, 24);
+            @include vwUnit('height', 24, 24);    
+            transition: 0.3s;
+        }
+
+        &:hover {
+            background-color: color(mini-title);
+
+            div {
+                background-color: color(white);
+            }
+        }
+    }
+
+    &__wrapper {
+        @include vwUnit('margin-bottom', 40, 20);
+    }
+
+    &__heading {
+        @include typo(paragraph-md);
+        @include vwUnit('margin-bottom', 35, 25);
+        color: color(white);
+        opacity: 0.5;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    &__text {
+        ul {
+            padding-left: 0;
+            list-style-type: none;
+        }
+
+        a {
+            color: currentColor;
+            text-decoration: none;
+        }
+
+        p {
+            margin-bottom: 0;
+        }
+    }
+    &__navbar {
+        .menu-item {
+            list-style: none;
+            a {
+                @include typo(h3);
+                text-transform: uppercase;
+                text-decoration: none;
+                color: color(white);
+                @include vwUnit(padding, 10 0);
+                display: block;
+                @include transition(0.3s);
+                &:first-child {
+                    @include vwUnit(padding-top, 0);
+                }
+                &:hover {
+                    opacity: 0.5;
+                    @include transition(0.3s);
+                }
+            }
+        }
+    }
+    &__contact {
+        a {
+            @include typo(paragraph-xl);
+            @include vwUnit(margin-bottom, 10);
+            display: block;
+        }
+    }
+    &__copyright,
+    &__captcha {
+        @include typo(paragraph-sm);
+        opacity: 0.5;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        a {
+            text-decoration: none;
+            color: color(white);
+        }
+    }
+}
