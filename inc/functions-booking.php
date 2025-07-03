@@ -105,6 +105,20 @@ function custom_booking_form_fields() {
         });
 
         updateTotalAndData();
+
+        // ✅ Datepicker trigger from calendar icon
+        const dateTrigger = document.querySelector('.input-group-text');
+        const dateInput = document.querySelector('input[name="visit_date"]');
+
+        if (dateTrigger && dateInput) {
+            dateTrigger.addEventListener('click', function () {
+                if (typeof dateInput.showPicker === 'function') {
+                    dateInput.showPicker();
+                } else {
+                    dateInput.focus();
+                }
+            });
+        }
     });
     </script>
     <?php
@@ -180,33 +194,15 @@ add_action('woocommerce_checkout_create_order', function($order, $data) {
 add_action('woocommerce_checkout_create_order_line_item', function($item, $cart_item_key, $values, $order) {
     if (!empty($values['visit_date'])) {
         $item->add_meta_data('Date of Visit', $values['visit_date']);
+        $order->update_meta_data('visit_date', $values['visit_date']);
     }
-
-    $ticket_meta = []; // Store ticket numbers + QR
-
-    foreach ($values['booking_data'] as $customer) {
-        $age = ucfirst($customer['age']);
-        $nationality = ucfirst($customer['nationality']);
-        $quantity = (int)$customer['quantity'];
-
-        for ($i = 0; $i < $quantity; $i++) {
-            $ticket_number = "#" . $order->get_id() . '-' . (count($ticket_meta) + 1);
-            $qr_text = "{$ticket_number} | {$order->get_billing_first_name()} {$order->get_billing_last_name()} | {$values['visit_date']}";
-            $qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=' . urlencode($qr_text);
-
-            $ticket_meta[] = [
-                'ticket_number' => $ticket_number,
-                'qr_url' => $qr_url,
-                'age' => $age,
-                'nationality' => $nationality
-            ];
+    if (!empty($values['booking_data'])) {
+        foreach ($values['booking_data'] as $index => $customer) {
+            $item->add_meta_data("Customer " . ($index + 1), "{$customer['quantity']} × {$customer['age']} ({$customer['nationality']})");
         }
+        $item->add_meta_data('booking_data', json_encode($values['booking_data']));
     }
-
-    $item->add_meta_data('booking_data', json_encode($values['booking_data']));
-    $item->add_meta_data('tickets', json_encode($ticket_meta)); // 💾 save for later
 }, 10, 4);
-
 
 // 6. Hide Internal Meta on Frontend
 add_filter('woocommerce_order_item_get_formatted_meta_data', function($formatted_meta, $item) {
@@ -221,59 +217,93 @@ add_filter('woocommerce_order_item_get_formatted_meta_data', function($formatted
     return $formatted_meta;
 }, 10, 2);
 
+
+
 // 7. Send Order Data to Google Sheets
-add_action('woocommerce_checkout_order_processed', 'send_order_to_google_sheet', 10, 1);
+add_action('woocommerce_order_status_completed', 'send_order_to_google_sheet', 10, 1);
 function send_order_to_google_sheet($order_id) {
     $order = wc_get_order($order_id);
-    $billing_name = trim($order->get_billing_first_name() . ' ' . $order->get_billing_last_name());
+    $booking_data_raw = [];
 
-    $ticket_counter = 1;
-    $booking_data_lines = [];
-    $ticket_numbers = [];
-    $qr_urls = [];
+    // Counters
+    $adult_domestic = 0;
+    $adult_foreigner = 0;
+    $child_domestic = 0;
+    $child_foreigner = 0;
+    $total_pax = 0;
 
     foreach ($order->get_items() as $item) {
-        $visit_date = $item->get_meta('Date of Visit') ?: $order->get_date_created()->date('Y-m-d');
-        $booking_json = $item->get_meta('booking_data');
-        if (!$booking_json) continue;
+        foreach ($item->get_meta_data() as $meta) {
+            if (strpos(strtolower($meta->key), 'customer') !== false) {
+                $booking_data_raw[] = $meta->value;
 
-        $booking = json_decode($booking_json, true);
-        foreach ($booking as $customer) {
-            $age = ucfirst($customer['age']);
-            $nationality = ucfirst($customer['nationality']);
-            $quantity = (int)$customer['quantity'];
+                if (preg_match('/(\d+)\s×\s(\w+)\s\((\w+)\)/', $meta->value, $matches)) {
+                    $qty = (int)$matches[1];
+                    $age = strtolower($matches[2]);
+                    $nationality = strtolower($matches[3]);
 
-            $booking_data_lines[] = "{$quantity} × {$age} ({$nationality})";
+                    $total_pax += $qty;
 
-            for ($i = 1; $i <= $quantity; $i++) {
-                $ticket_number = "#{$order_id}-{$ticket_counter}";
-                $qr_text = "{$ticket_number} | {$billing_name} | {$visit_date}";
-                $qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=' . urlencode($qr_text);
-
-                $ticket_numbers[] = $ticket_number;
-                $qr_urls[] = $qr_url;
-
-                $ticket_counter++;
+                    if ($age === 'adult' && $nationality === 'domestic') $adult_domestic += $qty;
+                    if ($age === 'adult' && $nationality === 'foreigner') $adult_foreigner += $qty;
+                    if ($age === 'child' && $nationality === 'domestic') $child_domestic += $qty;
+                    if ($age === 'child' && $nationality === 'foreigner') $child_foreigner += $qty;
+                }
             }
         }
     }
 
-    // Prepare one-row data
+    // Ticket numbers
+    $ticket_numbers = [];
+    for ($i = 1; $i <= $total_pax; $i++) {
+        $ticket_numbers[] = "{$order_id}-{$i}";
+    }
+
+    // Get coupon/referral
+    $referral_code = '';
+    foreach ($order->get_items('coupon') as $coupon) {
+        $referral_code = $coupon->get_name();
+        break;
+    }
+
+    $visit_date     = $order->get_meta('visit_date');
+    $discount_total = $order->get_discount_total();
+    $total_price    = $order->get_subtotal(); // before discount
+    $net_price      = $order->get_total();    // after discount
+
+    // Get real Midtrans payment method via API
+    $payment_method = $order->get_payment_method_title(); // fallback
+    $midtrans_payment_type = get_midtrans_payment_type($order_id);
+    if ($midtrans_payment_type) {
+        $payment_method = ucwords(str_replace('_', ' ', $midtrans_payment_type)); // e.g., credit_card → Credit Card
+        $order->update_meta_data('payment_type', $midtrans_payment_type);
+        $order->save();
+    }
+
+    // Prepare data
     $data = [
-        'order_id'        => $order_id,
-        'customer_name'   => $billing_name,
-        'email'           => $order->get_billing_email(),
-        'phone'           => $order->get_billing_phone(),
-        'visit_date'      => get_post_meta($order_id, 'visit_date', true) ?: '',
-        'total'           => $order->get_total(),
-        'payment_status'  => $order->get_status(),
-        'booking_data'    => implode("\n", $booking_data_lines),
-        'ticket_numbers'  => implode("\n", $ticket_numbers),
-        'qr_urls'         => implode("\n", $qr_urls),
+        'order_id'          => $order_id,
+        'ticket_numbers'    => implode(", ", $ticket_numbers),
+        'customer_name'     => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+        'email'             => $order->get_billing_email(),
+        'phone'             => $order->get_billing_phone(),
+        'visit_date'        => $visit_date,
+        'payment_status'    => $order->get_status(),
+        'booking_data'      => implode("\n", $booking_data_raw),
+        'no_of_pax'         => $total_pax,
+        'adult_domestic'    => $adult_domestic,
+        'adult_foreigner'   => $adult_foreigner,
+        'child_domestic'    => $child_domestic,
+        'child_foreigner'   => $child_foreigner,
+        'referral_code'     => $referral_code,
+        'payment_method'    => $payment_method,
+        'discount'          => $discount_total,
+        'total_price'       => $total_price,
+        'net_price'         => $net_price,
     ];
 
-    // Send to Google Sheet
-    $url = 'https://script.google.com/macros/s/AKfycbzG84mNh2FmCEvE0n2lBIHLsWB5HnBRNnbU6iK0JioEXO9UPuBrCbmVqFT2uJPTK5gO/exec';
+    $url = 'https://script.google.com/macros/s/AKfycbxMfl0x1bMmI1zPDbCCxM7shm1fwW-bG5rPVT2SQVokPsFU88DCzfZEiGkj4cnO3rFv/exec';
+
     wp_remote_post($url, [
         'method'      => 'POST',
         'body'        => json_encode($data),
@@ -282,5 +312,27 @@ function send_order_to_google_sheet($order_id) {
     ]);
 }
 
+// Helper: Query Midtrans for actual payment_type
+function get_midtrans_payment_type($order_id) {
+    $server_key = 'SB-Mid-server-uv1lWe_HsJoeBu5R4EnFTjOR'; // Replace with your real Server Key
+    $is_sandbox = true; // false in production
+
+    $url = $is_sandbox
+        ? "https://api.sandbox.midtrans.com/v2/{$order_id}/status"
+        : "https://api.midtrans.com/v2/{$order_id}/status";
+
+    $response = wp_remote_get($url, [
+        'headers' => [
+            'Authorization' => 'Basic ' . base64_encode($server_key . ':')
+        ]
+    ]);
+
+    if (!is_wp_error($response)) {
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        return $body['payment_type'] ?? null;
+    }
+
+    return null;
+}
 
 

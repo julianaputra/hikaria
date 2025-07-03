@@ -11,6 +11,11 @@
         text-align: left;
         width: 100%;
     }
+    &__section-subtitle {
+        a {
+            color: color(mini-title);
+        }
+    }
 }
 .faq-accordion {
     &__item {

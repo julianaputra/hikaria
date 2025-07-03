@@ -2017,6 +2017,9 @@ button.swiper-pagination-bullet {
   text-align: left;
   width: 100%;
 }
+.faq__section-subtitle a {
+  color: #6e6e6e;
+}
 
 .faq-accordion__item {
   background: rgba(255, 255, 255, 0.0509803922);
@@ -2115,6 +2118,7 @@ button.swiper-pagination-bullet {
   padding: 13.0208333333vw 0vw;
   border-radius: 30px;
   height: 100vh;
+  z-index: 2;
 }
 @media screen and (max-width: 1199.98px) {
   .cta__holder {

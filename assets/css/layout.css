@@ -11084,6 +11084,10 @@ progress {
   display: none;
 }
 
+input[type=date]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
 .booking-form__date {
   margin-bottom: 1.5625vw;
 }

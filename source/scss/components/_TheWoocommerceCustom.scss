@@ -53,6 +53,10 @@
     }
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
 .booking-form {
     &__date {
         @include vwUnit(margin-bottom, 30);

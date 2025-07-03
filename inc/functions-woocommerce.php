@@ -109,3 +109,11 @@ function redirect_cart_to_404() {
         exit;
     }
 }
+
+// change order id format
+// Add custom order number format
+add_filter('woocommerce_order_number', 'custom_woocommerce_order_number', 10, 2);
+function custom_woocommerce_order_number($order_number, $order) {
+    $prefix = 'HKR-WEB-';
+    return $prefix . $order->get_id();
+}

@@ -54,7 +54,7 @@
                                 $socmedName = get_sub_field('name');
                                 $socmedUrl = get_sub_field('url');
                             ?>
-                                <a href="<?php echo esc_url('$socmedUrl');?>" class="footer__social-item" target="_blank" aria-label="social media">
+                                <a href="<?php echo esc_url($socmedUrl);?>" class="footer__social-item" target="_blank" aria-label="social media">
                                     <div style="mask-image: url('<?php echo esc_url($socmedIcon['url']);?>'); -webkit-mask-image: url('<?php echo esc_url($socmedIcon['url']);?>');"></div>
                                 </a>
                             <?php endwhile;?>
