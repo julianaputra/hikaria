@@ -5,7 +5,7 @@
     $bannerDesc = get_field('banner_description');
 ?>
 <section class="banner">
-    <div class="banner__container-fluid">
+    <div class="container-fluid banner__container-fluid">
         <div class="banner__video-container">
             <video autoplay muted loop playsinline id="banner-video" class="banner__video">
                 <source src="<?php echo esc_url($bannerVideo['url']);?>" type="video/mp4">

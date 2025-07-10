@@ -60,6 +60,10 @@ function tmdr_script_enqueue() {
         tmdr_print_css('thankyouCss', 'pages/thankyou.css');
         // tmdr_print_js('thankyouJs', 'pages/thankyou.js');
     }
+
+    if (is_page_template('page-templates/term-conditions.php')) {
+        tmdr_print_css('temConditionsCss', 'pages/term-conditions.css');
+    }
     
     // example code to add CSS and JS to Singular Page
     /*

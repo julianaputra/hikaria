@@ -39,32 +39,48 @@ if (!$checkout->is_registration_enabled() && $checkout->is_registration_required
     <div class="custom-checkout-layout container">
         <div class="row">
             <!-- LEFT COLUMN -->
-            <div class="col-md-7">
+            <div class="col-lg-7">
                 <?php do_action('woocommerce_checkout_billing'); ?>
 				
 				
-				<div class="checkout-term">
+				<div class="checkout-term checkout-term__desktop">
 					<span class="checkout-term__label">By Proceeding with your purchase you agree to our <a href="#" target="_blank">Terms and Conditions</a> and <a href="#" target="_blank">Privacy Policy</a></span>
 				</div>
-				<div class="custom-checkout-button">
+				<div class="custom-checkout-button custom-checkout-button__desktop">
 					<a href="<?php echo home_url(); ?>/product/cultural-storytelling-in-light/?clear-cart=1" class="themeBtn back-booking">
-						Return to Tickets Booking
+						<span>Return to Tickets Booking</span>
 					</a>
-
-					<?php
-						do_action( 'woocommerce_review_order_before_submit' );
-						echo apply_filters( 'woocommerce_order_button_html', '<button type="submit" class="themeBtn button alt" name="woocommerce_checkout_place_order" id="place_order" value="' . esc_attr( __( 'Processed order', 'woocommerce' ) ) . '" data-value="' . esc_attr( __( 'Processed order', 'woocommerce' ) ) . '">' . esc_html__( 'Processed order', 'woocommerce' ) . '</button>' );
-						do_action( 'woocommerce_review_order_after_submit' );
-					?>
+                    <button type="submit"
+                        class="themeBtn button alt"
+                        name="woocommerce_checkout_place_order"
+                        id="place_order">
+                        <span>Processed order</span>
+                    </button>
 				</div>
             </div>
 
             <!-- RIGHT COLUMN -->
-            <div class="col-md-5">
+            <div class="col-lg-5">
                 <h2 class="section-order-summary">Order Summary</h2>
                 <?php do_action('woocommerce_review_order_before_payment'); ?>
 
                 <?php do_action('woocommerce_checkout_order_review'); ?>
+
+
+                <div class="checkout-term checkout-term__mobile">
+					<span class="checkout-term__label">By Proceeding with your purchase you agree to our <a href="#" target="_blank">Terms and Conditions</a> and <a href="#" target="_blank">Privacy Policy</a></span>
+				</div>
+				<div class="custom-checkout-button custom-checkout-button__mobile">
+					<a href="<?php echo home_url(); ?>/product/cultural-storytelling-in-light/?clear-cart=1" class="themeBtn back-booking">
+						<span>Return to Tickets Booking</span>
+					</a>
+                    <button type="submit"
+                        class="themeBtn button alt"
+                        name="woocommerce_checkout_place_order"
+                        id="place_order">
+                        <span>Processed order</span>
+                    </button>
+				</div>
             </div>
         </div>
     </div>

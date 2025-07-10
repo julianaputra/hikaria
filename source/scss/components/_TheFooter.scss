@@ -2,7 +2,7 @@
 @use 'sass:color';
 
 .footer {
-    @include imageRatio(280 60, false, true, contain, 'logo');
+    @include imageRatio(200 57, false, true, contain, 'logo');
     background-color: color(black);
     color: #fff;
     position: relative;
@@ -33,13 +33,22 @@
     }
 
     &__top {
-        @include vwUnit('padding', 180 0 80 0, 40 0 20 0);
+        @include vwUnit('padding', 180 0 80 0, 80 0 20 0);
     }
 
     &__bottom {
         @include vwUnit('padding', 25 0, 20 0);
         display: flex;
         justify-content: space-between;
+        @media (max-width: 767.98px) {
+            display: block;
+        }
+    }
+
+    &__logo-container {
+        @media (max-width: 767.98px) {
+            @include vwMobile(margin-bottom, 50);
+        }
     }
 
     &__social-wrapper {
@@ -111,6 +120,10 @@
         }
     }
     &__navbar {
+        @media (max-width: 767.98px) {
+            @include vwMobile(padding-left, 0);
+            @include vwMobile(margin-bottom, 50);
+        }
         .menu-item {
             list-style: none;
             a {

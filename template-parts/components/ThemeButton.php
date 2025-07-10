@@ -12,5 +12,5 @@
     class="themeBtn <?php echo $class ?>"
     <?php echo ($newTab) ? 'target="_blank"' : '' ?>
 >
-    <?php echo $text ?>
+    <span><?php echo $text ?><span>
 </a>

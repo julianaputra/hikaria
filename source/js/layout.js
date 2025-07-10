@@ -5,6 +5,7 @@ import { slideUp, slideDown, slideToggle, fadeOut, fadeIn, fadeToggle } from './
 import Offcanvas from 'bootstrap/js/dist/offcanvas';
 import Modal from 'bootstrap/js/dist/modal';
 import Tabs from 'bootstrap/js/dist/tab';
+import intlTelInput from 'intl-tel-input';
 
 /**
  * Coding Standards
@@ -94,4 +95,28 @@ document.addEventListener('DOMContentLoaded', () => {
     hello()
     checkNavbarScrolled()
     navbarMegaMenu()
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const phoneInput = document.querySelector('#billing_phone');
+    if (!phoneInput) return;
+
+    const iti = intlTelInput(phoneInput, {
+        initialCountry: 'id',
+        preferredCountries: ['id', 'sg', 'my', 'us', 'gb'],
+        utilsScript: 'intl-tel-input/build/js/utils.js',
+        nationalMode: false,
+        autoPlaceholder: 'polite',
+        formatOnDisplay: true,
+        flagsImagePath: '/wp-content/themes/tmdrxhikaria/assets/intl-tel-input/img/flags.webp'
+    });
+
+    const form = document.querySelector('form.checkout');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            if (iti.isValidNumber()) {
+                phoneInput.value = iti.getNumber();
+            }
+        });
+    }
 });

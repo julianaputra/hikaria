@@ -2,28 +2,50 @@
 @use 'sass:color';
 
 .custom-navbar {
-    @include imageRatio(200 40, false, true, contain, 'logo');
-    background: linear-gradient(180deg, #111111 0%, rgba(17, 17, 17, 0) 100%);
-    backdrop-filter: blur(10px);
+    @include imageRatio(200 50, 150 43, true, contain, 'logo');
     position: sticky;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 99;
     min-height: 87px;
+    background: linear-gradient(180deg, #111111 0%, rgba(17, 17, 17, 0) 100%);
+    @media (min-width: 768px) {
+        backdrop-filter: blur(10px);
+    }
     .container {
         @media (max-width: 1199.98px) {
             max-width: 100%;
-            @include vwUnit(padding, 30);
+            @include vwUnit(padding, 15 30);
 
         }
     }
     &__offcanvas {
-        align-items: center;
+        @media (min-width: 768px) {
+            align-items: center;
+        }
+        @media (max-width: 767.98px) {
+            background: linear-gradient(180deg, #111111 0%, rgba(17, 17, 17, 0) 100%);
+            backdrop-filter: blur(10px);
+        }
+        .btn-close {
+            @media (max-width: 767.98px) {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(70deg) brightness(106%) contrast(106%);
+                &:focus {
+                    box-shadow: none;
+                }
+            }
+        }
     }
 
     &__offcanvas-body {
         justify-content: flex-end;
+        @media (max-width: 767.98px) {
+            @include vwMobile(padding-top, 40);
+        }
     }
 
     &__navbar-nav {
@@ -76,6 +98,10 @@
                 letter-spacing: 1px;
                 @media (max-width: 1199.98px) {
                     padding: unit(10, 1199.98);
+                }
+                @media (max-width: 767.98px) {
+                    display: block;
+                    text-align: center;
                 }
 
                 &:hover {
@@ -153,7 +179,7 @@
 
         &.collapsed {
             .custom-navbar__navbar-toggler-icon {
-                background-color: color(red);
+                background-color: color(white);
 
                 &.top {
                     margin-top: -15px;
@@ -179,7 +205,7 @@
         left: 0;
         height: 2px;
         width: 100%;
-        background-color: color(black);
+        background-color: color(white);
         border-radius: 1px;
         opacity: 1;
         transform: rotate(0deg);
@@ -205,6 +231,16 @@
         &:hover, &:focus, &:focus-visible {
             box-shadow: none;
             border: 0;
+        }
+    }
+    &__button-holder {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        .ticket-button {
+            @media (max-width: 480.98px) {
+                display: none;
+            }
         }
     }
 

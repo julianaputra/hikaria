@@ -2,15 +2,21 @@
 @use 'sass:color';
 
 .product {
-    @include vwUnit(padding, 100 0);
+    @include vwUnit(padding, 100 0, 50 0);
     display: flex;
     justify-content: space-between;
+    @media (max-width: 991.98px) {
+        display: block;
+    }
     &__row {
         justify-content: space-between;
     }
     .woocommerce-product-gallery {
         flex: 0 0 auto;
         width: 41.66666667%;
+        @media (max-width: 991.98px) {
+            width: 100%;
+        }
     }
     .zoomtoo-container {
         @include vwUnit(height, 480);
@@ -19,6 +25,10 @@
     .entry-summary {
         flex: 0 0 auto;
         width: 50%;
+        @media (max-width: 991.98px) {
+            width: 100%;
+            @include vwMobile(margin-top, 50);
+        }
     }
     img {
         width: 100%;
@@ -58,8 +68,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .booking-form {
-    &__date {
+    &__date,
+    &__time {
         @include vwUnit(margin-bottom, 30);
+    }
+    &__time {
+        .form-select {
+            filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(4478%) hue-rotate(359deg) brightness(108%) contrast(98%);
+        }
     }
     label {
         @include typo(paragraph-sm);
@@ -114,7 +130,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid rgba(255,255,255,0.1);
-    @include vwUnit(padding, 22 20);
+    @include vwUnit(padding, 22 20, 12 10);
     &:last-child {
         border-bottom: none;
     }
@@ -124,12 +140,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     @include typo(paragraph-sm);
     font-weight: 400;
     flex: 1;
-}
-.ticket-label .ticket-sub {
-    font-size: 12px;
-    color: #aaa;
-    margin-left: 4px;
-}
+    .ticket-sub {
+        font-size: 12px;
+        color: #aaa;
+        margin-left: 4px;
+        @media (max-width: 767.98px) {
+            display: block;
+        }
+    }
+} 
 .ticket-price {
     @include vwUnit(padding-right, 30);
     @include vwUnit(width, 120);
@@ -142,6 +161,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: flex;
     align-items: center;
     gap: 20px;
+    @media (max-width: 479.98px) {
+        gap: 5px;
+    }
     button {
         @include vwUnit(width, 45);
         @include vwUnit(height, 45);
@@ -186,7 +208,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 // DEFAULT WOOCOMMERCE
 .woocommerce-section {
-    @include vwUnit(padding, 50 0 70 0);
+    @include vwUnit(padding, 50 0 70 0, 50 0 30 0);
     @include vwUnit(margin-bottom, 40);
     border-bottom: 1px solid #3F3F46;
     text-align: center;
@@ -207,6 +229,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         width: 60%;
         font-weight: 400;
         display: inline-block;
+        @media (max-width: 767.98px) {
+            width: 100%;
+        }
     }
 }
 
@@ -246,6 +271,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
             @include vwUnit(width, 100);
         }
     }
+    .iti {
+        &--inline-dropdown {
+            width: 100%;
+        }
+        &__country {
+            color: color(black);
+        }
+    }
 }
 .checkout {
     color: color(white);
@@ -255,6 +288,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border-top: 1px solid color(neutral, 700);
     @include vwUnit(margin-top, 50);
     @include vwUnit(padding-top, 30);
+    &__desktop {
+        @media (max-width: 991.98px) {
+            display: none;
+        }
+    }
+    &__mobile {
+        @media (min-width: 992px) {
+            display: none;
+        }
+    }
     &__label {
         position: relative;
         @include vwUnit(padding-left, 35);
@@ -277,16 +320,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         }
     }
 }
+.woocommerce-nationality {
+    display: none;
+}
 .custom-checkout-button {
     display: flex;
     gap: 15px;
+    &__desktop {
+        @media (max-width: 991.98px) {
+            display: none;
+        }
+    }
+    &__mobile {
+        @media (min-width: 992px) {
+            display: none;
+        }
+    }
     .themeBtn {
         @include vwUnit(padding, 30 40);
         font-weight: 700;
     }
 }
 .back-booking.themeBtn {
-    @include vwUnit(padding, 30 40 30 70);
+    @include vwUnit(padding, 30 40 30 70, 30);
     letter-spacing: 0;
     background: transparent;
     border: 1px solid color(white);
@@ -305,6 +361,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         top: 50%;
         @include vwUnit(left, 30);
         transform: translateY(-50%);
+        @media (max-width: 991.98px) {
+            content: none;
+        }
     }
     &:hover {
         @include transition(0.5s);
@@ -371,6 +430,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
             @include vwUnit(margin-bottom, 10);
         }
         &__date,
+        &__time,
         &__customer {
             @include vwUnit(margin-bottom, 5);
             @include typo(paragraph-sm);
@@ -413,6 +473,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     @include vwUnit(margin, 70 0);
     display: flex;
     gap: 40px;
+    @media (max-width: 767.98px) {
+        flex-direction: column;
+        gap: 30px;
+    }
     li {
         list-style: none;
         color: color(white);
@@ -442,11 +506,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         @include vwUnit(margin, 70 0);
         display: flex;
         gap: 40px;
+        @media (max-width: 767.98px) {
+            flex-direction: column;
+            gap: 25px;
+        }
         li {
             list-style: none;
             color: color(white);
             font-weight: 600;
             letter-spacing: 1px;
+            @include typo(paragraph-sm);
             strong {
                 display: block;
                 font-weight: 400;
@@ -514,7 +583,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
                         display: none;
                         font-weight: 400;
                     }
-                    &:first-child {
+                    &:first-child,
+                    &:nth-child(2) {
                         .wc-item-meta-label {
                             display: inline-block;
                         }
@@ -563,8 +633,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;
 }
 .midtrans_payment_info {
+    @media (max-width: 479.98px) {
+        display: block;
+        width: 100%;
+        tbody {
+            display: block;
+            width: 100%;
+        }
+    }
     tr {
         border-bottom: 1px solid color(neutral, 400);
+        @media (max-width: 479.98px) {
+            display: block;
+            width: 100%
+        }
     }
     th {
         @include vwUnit(padding, 15);
@@ -576,9 +658,80 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     td {
         @include vwUnit(padding, 15);
         text-align: right;
+        @media (max-width: 479.98px) {
+            display: block;
+            width: 100%;
+            text-align: left;
+            white-space: normal;
+            word-wrap: break-word;
+        }
         a {
             color: color(green);
             text-decoration: none;
+            @include typo(paragraph-sm);
         }
     }
+}
+
+.shop_table {
+    tr,
+    th,
+    td {
+        color: color(white);
+    }
+    .order_item {
+        border-bottom: 1px solid #ddd;
+        .wc-item-meta {
+            @include vwUnit(padding-left, 0);
+            @include vwUnit(margin-top, 30);
+            li {
+                list-style: none;
+            }
+        }
+    }
+    .product-quantity {
+        opacity: 0;
+    }
+    tfoot {
+        tr {
+            border-bottom: 1px solid #ddd;
+        }
+        td {
+            @include vwUnit(padding, 10);
+        }
+    }
+}
+#payment {
+    .wc_payment_methods {
+        display: none;
+    }
+    p {
+        color: color(white);
+        @include vwUnit(margin-top, 30);
+        a {
+            color: color(white);
+            text-decoration: none;
+        }
+    }
+}
+
+#place_order,
+#pay-button {
+    display: inline-block;
+    position: relative;
+    @include vwUnit('padding', 15 20);
+    @include typo(paragraph-sm);
+    font-weight: 400;
+    background-image: linear-gradient(color(green));
+    border-radius: 6px;
+    border: 0;
+    outline: 0;
+    color: color(black);
+    text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    transition: all 0.5s ease-out;
+    letter-spacing: 1px;
+    overflow: hidden;
+    cursor: pointer;
 }

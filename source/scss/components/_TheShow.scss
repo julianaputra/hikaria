@@ -6,7 +6,12 @@
 
 .the-show {
     @include vwUnit(padding, 250 0 125 0, 125 0 50 0);
-    @include imageRatio(950 800, $objectFit: cover);
+    @include imageRatio(950 800, 500 400, $objectFit: cover);
+    &__image-holder {
+        @media (max-width: 991.98px) {
+            @include vwMobile(margin-bottom, 30);
+        }
+    }
     &__image-container {
         border-radius: 10px;
         overflow: hidden;   
@@ -17,7 +22,7 @@
         height: 100%;
         width: 100%;
         text-align: left;
-        @include vwUnit(padding, 40);
+        @include vwUnit(padding, 40, 40 20);
         display: flex;
         flex-direction: column;
         justify-content: space-between;

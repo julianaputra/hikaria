@@ -5,7 +5,7 @@ function custom_booking_form_fields() {
     ?>
     <div id="booking-form" class="booking-form">
         <div class="booking-form__date">
-            <label>Date of Visit</label>
+            <label>Date of Visit <span>*</span></label>
             <div class="input-group">
                 <input type="date" name="visit_date" class="form-control" placeholder="Select Date" required>
                 <span class="input-group-text">
@@ -13,15 +13,31 @@ function custom_booking_form_fields() {
                 </span>
             </div>
         </div>
+        <div class="booking-form__time">
+            <label>Estimated Time of Arrival <span>*</span></label>
+            <select class="form-control form-select" name="estimated_time" required>
+                <option value="">Estimated Time of Arrival</option>
+                <?php
+                $start = new DateTime('18:30');
+                $end = new DateTime('21:30');
+                while ($start <= $end) {
+                    $label = $start->format('g:i A');
+                    $value = $start->format('H:i');
+                    echo "<option value=\"{$label}\">{$label}</option>";
+                    $start->modify('+30 minutes');
+                }
+                ?>
+            </select>
+        </div>
         <?php
         $ticket_groups = [
-            'Domestic' => [
-                'Adult_Domestic' => ['label' => 'Adult Domestic', 'price' => get_field('price_adult_domestic') ?: 0],
-                'Child_Domestic' => ['label' => 'Child Domestic <span class="ticket-sub">| 3 - 12 Years old</span>', 'price' => get_field('price_child_domestic') ?: 0],
+            'Local' => [
+                'Adult_Local' => ['label' => 'Adult Local', 'price' => get_field('price_adult_domestic') ?: 0],
+                'Child_Local' => ['label' => 'Child Local <span class="ticket-sub">| 3 - 12 Years old</span>', 'price' => get_field('price_child_domestic') ?: 0],
             ],
-            'Foreigner' => [
-                'Adult_Foreigner' => ['label' => 'Adult Foreigner', 'price' => get_field('price_adult_foreigner') ?: 0],
-                'Child_Foreigner' => ['label' => 'Child Foreigner <span class="ticket-sub">| 3 - 12 Years old</span>', 'price' => get_field('price_child_foreigner') ?: 0],
+            'International' => [
+                'Adult_International' => ['label' => 'Adult International', 'price' => get_field('price_adult_foreigner') ?: 0],
+                'Child_International' => ['label' => 'Child International <span class="ticket-sub">| 3 - 12 Years old</span>', 'price' => get_field('price_child_foreigner') ?: 0],
             ]
         ];
         $flat_ticket_prices = [];
@@ -54,7 +70,7 @@ function custom_booking_form_fields() {
             <span class="ticket-total__title">Total Price</span>
             <span class="dynamic-price">Rp0</span>
             <button type="submit" name="add-to-cart" value="<?php echo get_the_ID(); ?>" class="themeBtn">
-                PLACE ORDER
+                <span>PLACE ORDER</span>
             </button>
         </div>   
     </div>
@@ -65,6 +81,7 @@ function custom_booking_form_fields() {
 
         function updateTotalAndData() {
             let total = 0;
+            let totalQty = 0;
             const booking = [];
 
             document.querySelectorAll('.ticket-row').forEach(row => {
@@ -73,6 +90,7 @@ function custom_booking_form_fields() {
                 const quantity = parseInt(input.value);
                 if (quantity > 0) {
                     total += ticketPrices[key] * quantity;
+                    totalQty += quantity;
                     const parts = key.split('_');
                     booking.push({
                         age: parts[0],
@@ -84,6 +102,12 @@ function custom_booking_form_fields() {
 
             document.querySelector('.dynamic-price').textContent = `Rp${total.toLocaleString('id-ID')}`;
             document.querySelector('#booking_data').value = JSON.stringify(booking);
+
+            // Disable or enable PLACE ORDER button
+            const placeOrderBtn = document.querySelector('button[name="add-to-cart"]');
+            if (placeOrderBtn) {
+                placeOrderBtn.disabled = totalQty === 0;
+            }
         }
 
         document.querySelectorAll('.ticket-row').forEach(row => {
@@ -106,7 +130,7 @@ function custom_booking_form_fields() {
 
         updateTotalAndData();
 
-        // ✅ Datepicker trigger from calendar icon
+        // Trigger native date picker from icon
         const dateTrigger = document.querySelector('.input-group-text');
         const dateInput = document.querySelector('input[name="visit_date"]');
 
@@ -119,10 +143,60 @@ function custom_booking_form_fields() {
                 }
             });
         }
+
+        // Apply WITA-based minimum date
+        const now = new Date();
+        const witaOffset = 8 * 60;
+        const localOffset = now.getTimezoneOffset();
+        const offsetDiff = witaOffset + localOffset;
+        const witaNow = new Date(now.getTime() + offsetDiff * 60 * 1000);
+
+        let minDate = new Date(witaNow);
+        if (witaNow.getHours() >= 18) {
+            minDate.setDate(minDate.getDate() + 1);
+        }
+
+        const minDateStr = minDate.toISOString().split('T')[0];
+        dateInput.setAttribute('min', minDateStr);
+
+        // Prevent form submission if total is 0
+        const form = document.querySelector('form.cart');
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                const dateInput = document.querySelector('input[name="visit_date"]');
+                const timeSelect = document.querySelector('select[name="estimated_time"]');
+
+                const visitDate = dateInput.value;
+                const estimatedTime = timeSelect.value;
+
+                const totalQty = Array.from(document.querySelectorAll('.ticket-row input'))
+                    .reduce((sum, input) => sum + parseInt(input.value), 0);
+
+                let errorMessages = [];
+
+                if (!visitDate) {
+                    errorMessages.push("Please select a visit date.");
+                }
+
+                if (!estimatedTime) {
+                    errorMessages.push("Please select an estimated time of arrival.");
+                }
+
+                if (totalQty === 0) {
+                    errorMessages.push("Please select at least 1 ticket.");
+                }
+
+                if (errorMessages.length > 0) {
+                    e.preventDefault();
+                    alert(errorMessages.join('\n'));
+                }
+            });
+        }
     });
     </script>
     <?php
 }
+
 
 // 2. Save to Cart Item
 add_filter('woocommerce_add_cart_item_data', function($cart_item_data, $product_id, $variation_id) {
@@ -131,6 +205,9 @@ add_filter('woocommerce_add_cart_item_data', function($cart_item_data, $product_
     }
     if (isset($_POST['visit_date'])) {
         $cart_item_data['visit_date'] = sanitize_text_field($_POST['visit_date']);
+    }
+    if (isset($_POST['estimated_time'])) {
+        $cart_item_data['estimated_time'] = sanitize_text_field($_POST['estimated_time']);
     }
     return $cart_item_data;
 }, 10, 3);
@@ -141,6 +218,12 @@ add_filter('woocommerce_get_item_data', function($item_data, $cart_item) {
         $item_data[] = [
             'key' => 'Date of Visit',
             'value' => $cart_item['visit_date']
+        ];
+    }
+    if (!empty($cart_item['estimated_time'])) {
+        $item_data[] = [
+            'key' => 'Estimated Time of Arrival',
+            'value' => $cart_item['estimated_time']
         ];
     }
     if (!empty($cart_item['booking_data'])) {
@@ -162,10 +245,10 @@ add_action('woocommerce_before_calculate_totals', function($cart) {
         if (!empty($cart_item['booking_data'])) {
             $total = 0;
             $prices = [
-                "Child_Domestic" => get_field('price_child_domestic', $cart_item['product_id']) ?: 0,
-                "Adult_Domestic" => get_field('price_adult_domestic', $cart_item['product_id']) ?: 0,
-                "Child_Foreigner" => get_field('price_child_foreigner', $cart_item['product_id']) ?: 0,
-                "Adult_Foreigner" => get_field('price_adult_foreigner', $cart_item['product_id']) ?: 0
+                "Child_Local" => get_field('price_child_domestic', $cart_item['product_id']) ?: 0,
+                "Adult_Local" => get_field('price_adult_domestic', $cart_item['product_id']) ?: 0,
+                "Child_International" => get_field('price_child_foreigner', $cart_item['product_id']) ?: 0,
+                "Adult_International" => get_field('price_adult_foreigner', $cart_item['product_id']) ?: 0
             ];
 
             foreach ($cart_item['booking_data'] as $customer) {
@@ -180,21 +263,29 @@ add_action('woocommerce_before_calculate_totals', function($cart) {
     }
 });
 
-// ✅ NEW: Save visit_date to order meta
+// Save visit_date to order meta
 add_action('woocommerce_checkout_create_order', function($order, $data) {
     foreach (WC()->cart->get_cart() as $cart_item) {
         if (!empty($cart_item['visit_date'])) {
             $order->update_meta_data('visit_date', sanitize_text_field($cart_item['visit_date']));
-            break;
         }
+        if (!empty($cart_item['estimated_time'])) {
+            $order->update_meta_data('estimated_time', sanitize_text_field($cart_item['estimated_time']));
+        }
+        break;
     }
 }, 10, 2);
 
 // 5. Add to Order Item Meta
+
 add_action('woocommerce_checkout_create_order_line_item', function($item, $cart_item_key, $values, $order) {
     if (!empty($values['visit_date'])) {
         $item->add_meta_data('Date of Visit', $values['visit_date']);
         $order->update_meta_data('visit_date', $values['visit_date']);
+    }
+    if (!empty($values['estimated_time'])) {
+        $item->add_meta_data('estimated_time', $values['estimated_time']);
+        $order->update_meta_data('estimated_time', $values['estimated_time']);
     }
     if (!empty($values['booking_data'])) {
         foreach ($values['booking_data'] as $index => $customer) {
@@ -203,6 +294,7 @@ add_action('woocommerce_checkout_create_order_line_item', function($item, $cart_
         $item->add_meta_data('booking_data', json_encode($values['booking_data']));
     }
 }, 10, 4);
+
 
 // 6. Hide Internal Meta on Frontend
 add_filter('woocommerce_order_item_get_formatted_meta_data', function($formatted_meta, $item) {
@@ -213,23 +305,33 @@ add_filter('woocommerce_order_item_get_formatted_meta_data', function($formatted
         if ($meta->key === 'visit_date') {
             $formatted_meta[$key]->display_key = 'Date of Visit';
         }
+        if ($meta->key === 'estimated_time') {
+            $formatted_meta[$key]->display_key = 'Estimated Time of Arrival';
+        }
     }
     return $formatted_meta;
 }, 10, 2);
 
 
-
 // 7. Send Order Data to Google Sheets
-add_action('woocommerce_order_status_completed', 'send_order_to_google_sheet', 10, 1);
+add_action('woocommerce_thankyou', 'send_order_to_google_sheet', 10, 1);
 function send_order_to_google_sheet($order_id) {
+
+    if (!$order_id) return;
+
     $order = wc_get_order($order_id);
+
+    // Prevent duplicate entries
+    if (get_post_meta($order_id, '_sent_to_google_sheet', true)) {
+        return;
+    }
     $booking_data_raw = [];
 
     // Counters
-    $adult_domestic = 0;
-    $adult_foreigner = 0;
-    $child_domestic = 0;
-    $child_foreigner = 0;
+    $adult_local = 0;
+    $adult_international = 0;
+    $child_local = 0;
+    $child_international = 0;
     $total_pax = 0;
 
     foreach ($order->get_items() as $item) {
@@ -244,10 +346,10 @@ function send_order_to_google_sheet($order_id) {
 
                     $total_pax += $qty;
 
-                    if ($age === 'adult' && $nationality === 'domestic') $adult_domestic += $qty;
-                    if ($age === 'adult' && $nationality === 'foreigner') $adult_foreigner += $qty;
-                    if ($age === 'child' && $nationality === 'domestic') $child_domestic += $qty;
-                    if ($age === 'child' && $nationality === 'foreigner') $child_foreigner += $qty;
+                    if ($age === 'adult' && $nationality === 'local') $adult_local += $qty;
+                    if ($age === 'adult' && $nationality === 'international') $adult_international += $qty;
+                    if ($age === 'child' && $nationality === 'local') $child_local += $qty;
+                    if ($age === 'child' && $nationality === 'international') $child_international += $qty;
                 }
             }
         }
@@ -267,15 +369,16 @@ function send_order_to_google_sheet($order_id) {
     }
 
     $visit_date     = $order->get_meta('visit_date');
+    $estimated_time = $order->get_meta('estimated_time');
     $discount_total = $order->get_discount_total();
-    $total_price    = $order->get_subtotal(); // before discount
-    $net_price      = $order->get_total();    // after discount
+    $total_price    = $order->get_subtotal();
+    $net_price      = $order->get_total();
 
     // Get real Midtrans payment method via API
-    $payment_method = $order->get_payment_method_title(); // fallback
+    $payment_method = $order->get_payment_method_title();
     $midtrans_payment_type = get_midtrans_payment_type($order_id);
     if ($midtrans_payment_type) {
-        $payment_method = ucwords(str_replace('_', ' ', $midtrans_payment_type)); // e.g., credit_card → Credit Card
+        $payment_method = ucwords(str_replace('_', ' ', $midtrans_payment_type));
         $order->update_meta_data('payment_type', $midtrans_payment_type);
         $order->save();
     }
@@ -288,13 +391,14 @@ function send_order_to_google_sheet($order_id) {
         'email'             => $order->get_billing_email(),
         'phone'             => $order->get_billing_phone(),
         'visit_date'        => $visit_date,
+        'estimated_time'    => $estimated_time,
         'payment_status'    => $order->get_status(),
         'booking_data'      => implode("\n", $booking_data_raw),
         'no_of_pax'         => $total_pax,
-        'adult_domestic'    => $adult_domestic,
-        'adult_foreigner'   => $adult_foreigner,
-        'child_domestic'    => $child_domestic,
-        'child_foreigner'   => $child_foreigner,
+        'adult_local'       => $adult_local,
+        'adult_international'   => $adult_international,
+        'child_local'       => $child_local,
+        'child_international'   => $child_international,
         'referral_code'     => $referral_code,
         'payment_method'    => $payment_method,
         'discount'          => $discount_total,
@@ -302,7 +406,7 @@ function send_order_to_google_sheet($order_id) {
         'net_price'         => $net_price,
     ];
 
-    $url = 'https://script.google.com/macros/s/AKfycbxMfl0x1bMmI1zPDbCCxM7shm1fwW-bG5rPVT2SQVokPsFU88DCzfZEiGkj4cnO3rFv/exec';
+    $url = 'https://script.google.com/macros/s/AKfycbxONIPXCJMfedGRJpRW4ZE2rvnD-Bsn5kfRC4i87keSLIy2IyYzVMWY3AOyrEd3pW9S/exec';
 
     wp_remote_post($url, [
         'method'      => 'POST',
@@ -310,12 +414,15 @@ function send_order_to_google_sheet($order_id) {
         'headers'     => ['Content-Type' => 'application/json'],
         'data_format' => 'body',
     ]);
+
+    // Mark as sent
+    update_post_meta($order_id, '_sent_to_google_sheet', true);
 }
 
-// Helper: Query Midtrans for actual payment_type
+// 8.Query Midtrans for actual payment_type
 function get_midtrans_payment_type($order_id) {
-    $server_key = 'SB-Mid-server-uv1lWe_HsJoeBu5R4EnFTjOR'; // Replace with your real Server Key
-    $is_sandbox = true; // false in production
+    $server_key = 'SB-Mid-server-uv1lWe_HsJoeBu5R4EnFTjOR';
+    $is_sandbox = true;
 
     $url = $is_sandbox
         ? "https://api.sandbox.midtrans.com/v2/{$order_id}/status"
@@ -335,4 +442,44 @@ function get_midtrans_payment_type($order_id) {
     return null;
 }
 
+// 9. change payment status if complate
+add_action('woocommerce_order_status_completed', 'update_payment_status_to_google_sheet');
+function update_payment_status_to_google_sheet($order_id) {
+    $order = wc_get_order($order_id);
+    if (!$order) return;
 
+    $data = [
+        'type'              => 'update',
+        'order_id'          => $order_id,
+        'payment_status'    => 'completed',
+    ];
+
+    $url = 'https://script.google.com/macros/s/AKfycbxONIPXCJMfedGRJpRW4ZE2rvnD-Bsn5kfRC4i87keSLIy2IyYzVMWY3AOyrEd3pW9S/exec';
+    wp_remote_post($url, [
+        'method'    => 'POST',
+        'body'      => json_encode($data),
+        'headers'   => ['Content-Type' => 'application/json'],
+    ]);
+}
+
+// 10. change payment status if failed or canceled
+add_action('woocommerce_order_status_failed', 'update_google_sheet_on_failed_payment');
+add_action('woocommerce_order_status_cancelled', 'update_google_sheet_on_failed_payment');
+
+function update_google_sheet_on_failed_payment($order_id) {
+    $order = wc_get_order($order_id);
+    if (!$order) return;
+
+    $data = [
+        'type' => 'update',
+        'order_id' => $order_id,
+        'payment_status' => $order->get_status(),
+    ];
+
+    $url = 'https://script.google.com/macros/s/AKfycbxONIPXCJMfedGRJpRW4ZE2rvnD-Bsn5kfRC4i87keSLIy2IyYzVMWY3AOyrEd3pW9S/exec';
+    wp_remote_post($url, [
+        'method'    => 'POST',
+        'body'      => json_encode($data),
+        'headers'   => ['Content-Type' => 'application/json'],
+    ]);
+}

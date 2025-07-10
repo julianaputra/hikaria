@@ -12,7 +12,7 @@
         color: color(white);
         text-transform: uppercase;
         text-align: center;
-        @include vwUnit(margin-bottom, 30);
+        @include vwUnit(margin-bottom, 30, 20);
     }
     &__subtitle {
         @include typo(paragraph-md);
@@ -21,6 +21,9 @@
         width: 34%;
         text-align: center;
         display: inline-block;
-        @include vwUnit(margin-bottom, 70);
+        @include vwUnit(margin-bottom, 70, 50);
+        @media (max-width: 1199.98px) {
+            width: 100%;
+        }
     }
 }

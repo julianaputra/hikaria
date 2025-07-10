@@ -2,10 +2,11 @@
     "/assets/js/layout.js": "/assets/js/layout.js",
     "/assets/js/pages/home.js": "/assets/js/pages/home.js",
     "/assets/css/pages/home.css": "/assets/css/pages/home.css",
-    "/assets/css/admin/login.css": "/assets/css/admin/login.css",
+    "/assets/css/pages/term-conditions.css": "/assets/css/pages/term-conditions.css",
     "/assets/css/pages/thankyou.css": "/assets/css/pages/thankyou.css",
     "/assets/css/pages/404.css": "/assets/css/pages/404.css",
     "/assets/css/layout.css": "/assets/css/layout.css",
     "/assets/css/admin/colorScheme-client.css": "/assets/css/admin/colorScheme-client.css",
-    "/assets/css/admin/colorScheme-tmdr.css": "/assets/css/admin/colorScheme-tmdr.css"
+    "/assets/css/admin/colorScheme-tmdr.css": "/assets/css/admin/colorScheme-tmdr.css",
+    "/assets/css/admin/login.css": "/assets/css/admin/login.css"
 }

@@ -3,20 +3,28 @@
 
 .cta {
     &__container {
-        padding-left: 30px;
-        padding-right: 30px;
+        @media (min-width: 768px) {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
     }
     &__holder {
-        @include vwUnit(padding, 250 0);
+        @include vwUnit(padding, 250 0, 100 0);
         border-radius: 30px;
         height: 100vh;
         z-index: 2;
+        @media (max-width: 1199.98px) {
+            height: 60vh;
+            border-radius: 20px;
+        }
     }
     &__row {
         justify-content: center;
         text-align: center;
         align-items: center;
         height: 100%;
+        display: flex;
+        flex-direction: column;
     }
     .section__subtitle {
         display: block;
@@ -39,7 +47,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 150%;
     z-index: -1;
     background-size: cover;
     background-position: center;

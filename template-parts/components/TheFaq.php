@@ -6,11 +6,11 @@
 <section id="faq" class="section faq">
     <div class="container">
         <div class="row faq__row">
-            <div class="col-md-3">
+            <div class="col-lg-3">
                 <h2 class="section__title faq__section-title" data-aos="fade-up"><?php echo esc_html($sectionTitle);?></h2>
                 <div class="section__subtitle faq__section-subtitle" data-aos="fade-up"><?php echo $sectionSubtitle; ?></div>
             </div>
-            <div class="col-md-8">
+            <div class="col-lg-8">
                 <div class="accordion faq-accordion faq__list" id="accordionFaq" data-aos="fade-up">
                     <?php if(have_rows('faq_list')): ?>
                         <?php $i = 1; $first = true; ?>

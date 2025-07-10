@@ -27,7 +27,7 @@
     
     <?php wp_body_open(); ?>
     <?php
-        if ( is_product() || is_checkout() ):
+        if ( is_product() || is_checkout() || is_page_template('page-templates/term-conditions.php')):
             components('TheNavbarBooking');
         else:
             components('TheNavbar');

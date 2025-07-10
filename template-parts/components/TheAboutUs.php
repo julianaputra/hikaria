@@ -9,13 +9,13 @@
 <section id="aboutUs" class="section about-us">
     <div class="container">
         <div class="row about-us__row">
-            <div class="col-md-7">
+            <div class="col-lg-7">
                 <div class="about-us__big-container gsap-holder" data-aos="fade-up">
                     <!-- <img src="<?php echo esc_url($bigImage['url']);?>" alt="<?php echo esc_html($aboutUsTitle);?>" class="ratio-item gsap-parallax"> -->
                     <div class="gsap-parallax" style="background-image: url('<?php echo esc_url($bigImage['url']);?>')"></div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-4">
                 <div class="about-us__text" data-aos="fade-up">
                     <h2 class="about-us__title section__title"><?php echo esc_html($aboutUsTitle);?></h2>
                     <div class="about-us__desc"><?php echo $aboutUsDesc;?></div>

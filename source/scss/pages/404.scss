@@ -4,6 +4,7 @@
 .error {
     @include vwUnit('padding', 150 0, 60 0);
     text-align: center;
+    color: color(white);
 
     &__title {
         @include vwUnit('font-size', 32, 28);
@@ -41,6 +42,7 @@
         svg {
             @include vwUnit('width', 24, 24);
             @include vwUnit('height', 24, 24);
+            filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
         }
     }
 }

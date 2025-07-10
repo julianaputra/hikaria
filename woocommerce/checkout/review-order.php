@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) || exit;
             $product_image = wp_get_attachment_image_src($_product->get_image_id(), 'thumbnail')[0];
             $product_price = WC()->cart->get_product_price($_product);
 
-            // ✅ Read from custom cart item data
+            // Read from custom cart item data
             $visit_date = isset($cart_item['visit_date']) ? date('F j, Y', strtotime($cart_item['visit_date'])) : '';
             $customer_lines = [];
 
@@ -50,6 +50,9 @@ defined( 'ABSPATH' ) || exit;
                 <?php if ($visit_date): ?>
                     <p class="info-col__date">Date of Visit : <?php echo esc_html($visit_date); ?></p>
                 <?php endif; ?>
+				<?php if (!empty($cart_item['estimated_time'])): ?>
+					<p class="info-col__time">Estimated Time of Arrival : <?php echo esc_html($cart_item['estimated_time']); ?></p>
+				<?php endif; ?>
                 <?php foreach ($customer_lines as $line): ?>
                     <div class="info-col__customer"><?php echo esc_html($line); ?></div>
                 <?php endforeach; ?>

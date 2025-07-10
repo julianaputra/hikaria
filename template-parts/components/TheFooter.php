@@ -8,7 +8,7 @@
         <div class="footer__top">
             <div class="row">
                 <div class="col-md-3">
-                    <a href="<?php echo get_home_url() ?>" class="footer__logo-container">
+                    <a href="<?php echo get_home_url() ?>/?clear-cart=1" class="footer__logo-container">
                         <img src="<?php echo esc_url($footerLogo['url']);?>" alt="Hikaria Logo" class="ratio-item">
                     </a>
                 </div>
@@ -68,7 +68,7 @@
                 © <?php echo date('Y') ?> Hikaria. All Right Reserved.
             </p>
             <p class="footer__captcha mb-0">
-                <a href="#" target="_blank">Terms & Conditions</a>
+                <a href="<?php echo home_url();?>/term-conditions" target="_blank">Terms & Conditions</a>
             </p>
         </div>
     </div>

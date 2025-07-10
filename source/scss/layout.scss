@@ -15,6 +15,9 @@
 @use 'components/ThemeButton';
 @use 'components/TheWoocommerceCustom';
 
+// country code js
+@use '../../node_modules/intl-tel-input/build/css/intlTelInput.css';
+
 
 // |‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾| //
 // | Timedoor New Standard                   | //
@@ -44,7 +47,7 @@
 body {
     font-family: "Aspekta";
     position: relative;
-    background-color: #000000; 
+    background-color: #000000;
     &:before {
         content: '';
         background: linear-gradient(90deg, rgba(20, 41, 79, 0) 0%, rgba(20, 41, 79, 0.7) 100%);

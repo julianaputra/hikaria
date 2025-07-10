@@ -1,0 +1,32 @@
+@use 'sass:math';
+@use '../_config.scss' as *;
+
+.term-conditions {
+    @include vwUnit(padding, 50 0 70 0);
+    &__title {
+        @include typo(h1);
+        background: linear-gradient(90deg, #34F461 0%, #178DDD 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-align: center;
+        @include vwUnit(padding-bottom, 50);
+        border-bottom: 1px solid #3F3F46;
+    }
+    &__row {
+        justify-content: center;
+        @include vwUnit(padding-top, 30);
+    }
+    &__desc {
+        color: color(white);
+        h2 {
+            @include typo(h4);
+            @include vwUnit(margin, 50 0 20 0);
+        }
+        p {
+            @include typo(paragraph-md);
+            font-weight: 400;
+        }
+    }
+}

@@ -2,7 +2,7 @@
 @use 'sass:color';
 
 .faq {
-    @include vwUnit(padding, 125 0);
+    @include vwUnit(padding, 125 0, 80 0);
     &__row {
         justify-content: space-between;
     }
@@ -21,7 +21,7 @@
     &__item {
         background: #FFFFFF0D;
         border-radius: 6px;
-        @include vwUnit(padding, 40);
+        @include vwUnit(padding, 40, 30);
         @include vwUnit(margin-bottom, 30);
         border: none;
     }

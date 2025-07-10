@@ -2,17 +2,20 @@
 @use 'sass:color';
 
 .about-us {
-    @include vwUnit(padding, 125 0);
+    @include vwUnit(padding, 125 0, 80 0);
     @include imageRatio(950 1110, $objectFit: cover, $className: 'big');
-    @include imageRatio(530 700, $objectFit: cover, $className: 'small');
-    @include imageRatio(252 55, $objectFit: cover, $className: 'tmdr');
-    @include imageRatio(252 55, $objectFit: cover, $className: 'rhs');
+    @include imageRatio(530 700, 500 300, $objectFit: cover, $className: 'small');
+    @include imageRatio(252 55, 206 45, $objectFit: cover, $className: 'tmdr');
+    @include imageRatio(252 55, 206 45, $objectFit: cover, $className: 'rhs');
     &__row {
         justify-content: space-between;
     }
     &__big-container {
         overflow: hidden;
         border-radius: 10px;
+        @media (max-width: 991.98px) {
+            display: none!important;
+        }
     }
     &__title {
         text-align: left;
@@ -26,13 +29,19 @@
     &__logo {
         display: flex;
         gap: 30px;
+        @media (max-width: 991.98px) {
+            justify-content: space-between;
+        }
     }
     &__tmdr-container,
     &__rhs-container {
         width: 50%;
+        @media (max-width: 991.98px) {
+            width: 30%;
+        }
     }
     &__small-container {
-        @include vwUnit(margin-top, 80);
+        @include vwUnit(margin-top, 80, 50);
         border-radius: 10px;
         overflow: hidden;
     }

@@ -2,7 +2,7 @@
 @use 'sass:color';
 
 .maps {
-    @include vwUnit(padding, 125 0, 80 0);
+    @include vwUnit(padding, 125 0, 50 0);
     &__holder {
         position: relative;
     }

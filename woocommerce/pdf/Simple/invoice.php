@@ -22,8 +22,8 @@ foreach ($order->get_items() as $item) {
             $quantity = (int)$customer['quantity'];
 
             for ($i = 1; $i <= $quantity; $i++) {
-                $ticket_number = "HKR-WEB-{$order_id}#{$order_id}-{$ticket_counter}";
-                $qr_text = "{$ticket_number} | {$billing_name} | {$visit_date}";
+                $ticket_number = "HKR-WEB-{$order_id}+#{$order_id}-{$ticket_counter}";
+                $qr_text = "{$ticket_number}";
                 $qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=' . urlencode($qr_text);
                 ?>
 

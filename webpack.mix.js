@@ -4,6 +4,7 @@ mix.sass('source/scss/layout.scss', 'assets/css/')
     .sass('source/scss/pages/404.scss', 'assets/css/pages/')
     .sass('source/scss/pages/home.scss', 'assets/css/pages/')
     .sass('source/scss/pages/thankyou.scss', 'assets/css/pages/')
+    .sass('source/scss/pages/term-conditions.scss', 'assets/css/pages/')
     .sourceMaps(true, 'source-map');
 
 mix.js('source/js/layout.js', 'assets/js/')

@@ -42,35 +42,96 @@ function custom_redirect_to_checkout($url) {
 // }
 
 
-// custom form billing on checkout
+// Custom form billing on checkout
 add_filter('woocommerce_checkout_fields', 'custom_minimal_checkout_fields');
 function custom_minimal_checkout_fields($fields) {
+    // Define allowed fields
     $allowed = [
         'billing_first_name',
         'billing_phone',
         'billing_email',
     ];
 
+    // Remove all billing fields except allowed
     foreach ($fields['billing'] as $key => $field) {
         if (!in_array($key, $allowed)) {
             unset($fields['billing'][$key]);
         }
     }
 
-    // Optional: Customize field labels/placeholders
+    // Full Name
     $fields['billing']['billing_first_name']['label'] = 'Full Name';
-    $fields['billing']['billing_first_name']['placeholder'] = 'Fullname';
+    $fields['billing']['billing_first_name']['placeholder'] = 'Full Name';
+    $fields['billing']['billing_first_name']['priority'] = 10;
+    $fields['billing']['billing_first_name']['class'] = ['form-row-wide'];
 
+    // Phone Number (intl-tel-input handles country code)
     $fields['billing']['billing_phone']['label'] = 'Phone Number';
-    $fields['billing']['billing_phone']['placeholder'] = 'Phone Number';
+    $fields['billing']['billing_phone']['placeholder'] = 'e.g. 85976448533';
     $fields['billing']['billing_phone']['required'] = true;
+    $fields['billing']['billing_phone']['priority'] = 20;
+    $fields['billing']['billing_phone']['class'] = ['form-row-wide'];
 
+    // Email Address
     $fields['billing']['billing_email']['label'] = 'Email Address';
     $fields['billing']['billing_email']['placeholder'] = 'Email Address';
+    $fields['billing']['billing_email']['priority'] = 30;
+    $fields['billing']['billing_email']['class'] = ['form-row-wide'];
+
+    // Nationality
+    $fields['billing']['billing_nationality'] = [
+        'type'        => 'text',
+        'label'       => 'Nationality',
+        'placeholder' => 'e.g. Indonesian',
+        'required'    => true,
+        'class'       => ['form-row-wide'],
+        'priority'    => 40,
+    ];
 
     return $fields;
 }
 
+// add nationality in billing info
+add_action('woocommerce_checkout_update_order_meta', 'save_custom_nationality_field');
+function save_custom_nationality_field($order_id) {
+    if (!empty($_POST['billing_nationality'])) {
+        update_post_meta($order_id, '_billing_nationality', sanitize_text_field($_POST['billing_nationality']));
+    }
+}
+
+// Show it in the admin order details
+add_action('woocommerce_admin_order_data_after_billing_address', 'display_nationality_admin_order', 10, 1);
+function display_nationality_admin_order($order) {
+    $nationality = get_post_meta($order->get_id(), '_billing_nationality', true);
+    if ($nationality) {
+        echo '<p><strong>Nationality:</strong> ' . esc_html($nationality) . '</p>';
+    }
+}
+
+// Show Nationality on Thank You Page
+add_action('woocommerce_thankyou', 'display_nationality_on_thankyou', 20);
+function display_nationality_on_thankyou($order_id) {
+    $nationality = get_post_meta($order_id, '_billing_nationality', true);
+    if ($nationality) {
+        echo '<p class="woocommerce-nationality"><strong>Nationality:</strong> </br>' . esc_html($nationality) . '</p>';
+    }
+}
+
+// Show Nationality in WooCommerce Emails
+add_action('woocommerce_email_customer_details', 'display_nationality_in_email', 25, 4);
+function display_nationality_in_email($order, $sent_to_admin, $plain_text, $email) {
+    $nationality = get_post_meta($order->get_id(), '_billing_nationality', true);
+    if ($nationality) {
+        if ($plain_text) {
+            echo "\nNationality: " . $nationality . "\n";
+        } else {
+            echo '<p>' . esc_html($nationality) . '</p>';
+        }
+    }
+}
+
+
+// ================================================
 // remove coupon from default position
 remove_action('woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10);
 

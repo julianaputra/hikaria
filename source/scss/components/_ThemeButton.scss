@@ -7,7 +7,7 @@
     @include vwUnit('padding', 15 20);
     @include typo(paragraph-sm);
     font-weight: 400;
-    background: linear-gradient(color(green));
+    background-image: linear-gradient(color(green));
     border-radius: 6px;
     border: 0;
     outline: 0;
@@ -15,12 +15,27 @@
     text-decoration: none;
     text-align: center;
     text-transform: uppercase;
-    transition: linear 0.5s ease;
+    transition: all 0.5s ease-out;
     letter-spacing: 1px;
     overflow: hidden;
-
-    &:hover {
-        background: linear-gradient(90deg, #178DDD -23.96%, #34F461 100%);
-        transition: linear 0.5s ease;
+    &:after {
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 0.3em;
+        background-image: linear-gradient(90deg, #178DDD -23.96%, #34F461 100%);
+        transition: opacity 0.5s ease-out;
+        z-index: 2;
+        opacity: 0;
+    }
+    &:hover:after {
+        opacity: 1;
+    }
+    span {
+        position: relative;
+        z-index: 3;
     }
 }

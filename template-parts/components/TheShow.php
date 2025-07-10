@@ -26,7 +26,7 @@
 
                         <div class="swiper-slide">
                             <div class="row">
-                                <div class="col-xl-7 col-lg-6">
+                                <div class="col-xl-7 col-lg-6 the-show__image-holder">
                                     <div class="the-show__image-container">
                                         <img src="<?php echo esc_url($imageUrl);?>" alt="<?php echo esc_html($title);?>" class="ratio-item">
                                     </div>
@@ -53,7 +53,7 @@
                                                 </div>
                                                 <a href="<?php echo esc_url($locationLink);?>" class="the-show__location-link" target="_blank">Visit Location <img src="<?php echo get_template_directory_uri();?>/assets/images/external-link.svg"></a>
                                             </div>
-                                            <a href="<?php echo esc_url($permalink); ?>" class="themeBtn ticket-button">Get Your Tickets</a>
+                                            <a href="<?php echo esc_url($permalink); ?>" class="themeBtn ticket-button"><span>Get Your Tickets</span></a>
                                         </div>
                                     </div>
                                 </div>
