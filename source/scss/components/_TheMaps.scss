@@ -21,6 +21,19 @@
         display: none;
         z-index: 999;
         overflow: auto;
+        @media (max-width: 991.98px) {
+            position: fixed;
+            top: 50%;
+            right: auto;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 100%;
+            height: auto;
+            max-height: 70vh;
+        }
+        @media (max-width: 767.98px) {
+            width: 95%;
+        }
     }
     &__close {
         position: absolute;
@@ -33,6 +46,7 @@
         border: none;
         font-size: 25px;
         line-height: 1;
+        color: color(black);
     }
     &__image {
         border-radius: 8px;
@@ -54,6 +68,30 @@
         @include typo(paragraph-md);
         color: color(black);
         text-align: left;
+    }
+    &__sidebar-desktop {
+        @media (max-width: 991.98px) {
+            display: none!important;
+        }
+    }
+    &__sidebar-mobile {
+        @media (min-width: 992px) {
+            display: none;
+        }
+    }
+}
+
+.mapOpen {
+    overflow: hidden;
+    &:before {
+        content: '';
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0,0,0,0.8);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
     }
 }
 

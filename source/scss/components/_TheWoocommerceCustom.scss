@@ -113,8 +113,28 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    .ticket-tooltip {
+        @include vwUnit(margin-top, 5);
+        @include vwUnit(padding, 10);
+        background-color: color(white);
+        position: absolute;
+        border-radius: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        &::before {
+            content: "";
+            height: 15px;
+            width: 10px;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid #ddd;
+            position: absolute;
+            top: -15px;
+        }
+    }
 }
 .ticket-group {
+    position: relative;
     &__title {
         color: color(white);
         @include typo(paragraph-sm);
@@ -262,6 +282,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         border: 1px solid color(neutral, 500);
         color: color(neutral, 400);
         @include vwUnit(padding, 15);
+        @include typo(paragraph-md);
     }
     .woocommerce-checkout-payment {
         display: none;
@@ -272,12 +293,21 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         }
     }
     .iti {
+        width: 100%;
         &--inline-dropdown {
             width: 100%;
         }
         &__country {
             color: color(black);
         }
+    }
+    .woocommerce-Price-amount {
+        @include typo(paragraph-md);
+    }
+    .checkout-inline-error-message {
+        @include typo(paragraph-xs);
+        @include vwUnit(margin-top, 5);
+        color: color(error);
     }
 }
 .checkout {
@@ -303,6 +333,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         @include vwUnit(padding-left, 35);
         @include vwUnit(margin-bottom, 70);
         display: block;
+        @include typo(paragraph-md);
         &:before {
             content: '';
             background-image: url('../../assets/images/check.svg');
@@ -387,11 +418,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
     .checkout_coupon {
         display: block!important;
+        @media (max-width: 479.98px) {
+            .form-row {
+                display: block;
+            }
+            #coupon_code {
+                @include vwMobile(margin-bottom, 10);
+            }
+        }
     }
     .form-row {
         display: flex;
-        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: space-between;
         @include vwUnit(margin-bottom, 0);
+        @media (max-width: 480.98px) {
+            display: block;
+        }
+    }
+    #coupon_code {
+        width: 75%;
+        @media (max-width: 480.98px) {
+            width: 100%;
+        }
     }
     .button {
         @include vwUnit(padding, 10 50);
@@ -399,64 +448,109 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         text-transform: uppercase;
         border-radius: 6px;
         background-color: color(white);
+        width: 23%;
+        color: color(black);
+        @media (max-width: 480.98px) {
+            width: 50%;
+            @include vwMobile(margin-top, 10);
+        }
+    }
+    .coupon-error-notice {
+        @include vwUnit(margin-top, 10);
+        color: color(white);
+        @include typo(paragraph-xs);
+        width: 100%;
+        display: block;
     }
 }
 .shop_table {
     width: 100%;
-    .custom-cart-item {
-        align-items: center;
-        border-bottom: 1px solid color(neutral, 700);
-    }
-    .image-col,
-    .info-col,
-    .price-col {
-        @include vwUnit(padding, 30 15);
-    }
-    .image-col {
-        width: 20%;
-        img {
-            aspect-ratio: 1/1;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+    &.woocommerce-checkout-review-order-table {
+        @media (max-width: 479.98px) {
+            display: flex;
+            flex-direction: column;
         }
-    }
-    .info-col {
-        width: 60%;
-        &__title {
-            @include typo(paragraph-sm);
-            font-weight: 600;
-            letter-spacing: 1px;
-            @include vwUnit(margin-bottom, 10);
+        tbody {
+            @media (max-width: 479.98px) {
+                display: inline-block;
+                width: 100%;
+            }
         }
-        &__date,
-        &__time,
-        &__customer {
-            @include vwUnit(margin-bottom, 5);
-            @include typo(paragraph-sm);
+        .custom-cart-item {
+            align-items: center;
+            border-bottom: 1px solid color(neutral, 700);
+            @media (max-width: 479.98px) {
+                width: 100%;
+                display: block;
+            }
         }
-    }
-    .price-col {
-        width: 20%;
-    }
-    .cart-subtotal,
-    .order-total,
-    .cart-discount {
-        border-bottom: 1px solid color(neutral, 700);
-        th,
-        td {
+        .image-col,
+        .info-col,
+        .price-col {
             @include vwUnit(padding, 30 15);
+            @media (max-width: 489.98px) {
+                display: block;
+                width: 100%!important;
+                @include vwMobile(padding, 10 0);
+            }
         }
-        th {
-            @include typo(paragraph-sm);
-            text-transform: uppercase;
-            font-weight: 400;
-            letter-spacing: 2px;
+        .image-col {
+            width: 20%;
+            @media (max-width: 479.98px) {
+                width: 50%!important;
+            }
+            img {
+                aspect-ratio: 1/1;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
         }
-    }
-    .order-total {
-        th {
-            font-weight: 700;
+        .info-col {
+            width: 60%;
+            &__title {
+                @include typo(paragraph-sm);
+                font-weight: 600;
+                letter-spacing: 1px;
+                @include vwUnit(margin-bottom, 10);
+            }
+            &__date,
+            &__time,
+            &__customer {
+                @include vwUnit(margin-bottom, 5);
+                @include typo(paragraph-sm);
+            }
+        }
+        .price-col {
+            width: 20%;
+        }
+        .cart-subtotal,
+        .order-total,
+        .cart-discount {
+            border-bottom: 1px solid color(neutral, 700);
+            th,
+            td {
+                @include vwUnit(padding, 30 15);
+            }
+            th {
+                @include typo(paragraph-sm);
+                text-transform: uppercase;
+                font-weight: 400;
+                letter-spacing: 2px;
+            }
+        }
+        .order-total {
+            th {
+                font-weight: 700;
+            }
+        }
+        tfoot {
+            @media (max-width: 479.98px) {
+                tr {
+                    display: flex;
+                    justify-content: space-between;
+                }
+            }
         }
     }
 }
@@ -734,4 +828,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     letter-spacing: 1px;
     overflow: hidden;
     cursor: pointer;
+}
+
+.woocommerce-NoticeGroup-checkout {
+    display: none;
+    .woocommerce-error {
+        a {
+            color: color(error);
+            text-decoration: none;
+        }
+    }
 }

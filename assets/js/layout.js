@@ -32,7 +32,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
-
 /**
  * Coding Standards
  * ===========================
@@ -113,27 +112,57 @@ document.addEventListener('DOMContentLoaded', function () {
   checkNavbarScrolled();
   navbarMegaMenu();
 });
-document.addEventListener('DOMContentLoaded', function () {
+
+// Setup country code
+
+function initIntlTelInput() {
   var phoneInput = document.querySelector('#billing_phone');
-  if (!phoneInput) return;
+  if (!phoneInput) {
+    console.warn('No #billing_phone field found.');
+    return;
+  }
+  if (phoneInput.classList.contains('iti-initialized')) return;
+  phoneInput.classList.add('iti-initialized');
   var iti = intl_tel_input__WEBPACK_IMPORTED_MODULE_4___default()(phoneInput, {
     initialCountry: 'id',
     preferredCountries: ['id', 'sg', 'my', 'us', 'gb'],
-    utilsScript: 'intl-tel-input/build/js/utils.js',
     nationalMode: false,
     autoPlaceholder: 'polite',
     formatOnDisplay: true,
-    flagsImagePath: '/wp-content/themes/tmdrxhikaria/assets/intl-tel-input/img/flags.webp'
+    utilsScript: '/wp-content/themes/tmdrxhikaria/assets/js/utils.js'
   });
-  var form = document.querySelector('form.checkout');
-  if (form) {
-    form.addEventListener('submit', function (e) {
-      if (iti.isValidNumber()) {
-        phoneInput.value = iti.getNumber();
+  window.iti = iti;
+  iti.promise.then(function () {
+    // Ambil raw input dan parse ke format internasional
+    var raw = phoneInput.value.trim();
+    var parsed = raw.startsWith('+') ? raw : '+62' + raw;
+    iti.setNumber(parsed);
+    console.log('Formatted Number:', iti.getNumber());
+    var form = document.querySelector('form.checkout');
+    if (form) {
+      form.addEventListener('submit', function () {
+        var rawSubmit = phoneInput.value.trim();
+        var parsedSubmit = rawSubmit.startsWith('+') ? rawSubmit : '+62' + rawSubmit;
+        iti.setNumber(parsedSubmit);
+        if (iti.isValidNumber()) {
+          phoneInput.value = iti.getNumber();
+        } else {
+          console.warn('Invalid number format');
+        }
+      });
+    }
+
+    // Auto insert country dial code on change if input is empty
+    phoneInput.addEventListener('countrychange', function () {
+      if (phoneInput.value.trim() === '') {
+        var dialCode = iti.getSelectedCountryData().dialCode;
+        phoneInput.value = "+".concat(dialCode);
       }
     });
-  }
-});
+  });
+}
+document.addEventListener('DOMContentLoaded', initIntlTelInput);
+jQuery(document.body).on('updated_checkout', initIntlTelInput);
 
 /***/ }),
 
@@ -6053,10 +6082,10 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		var installedChunks = {
 /******/ 			"/assets/js/layout": 0,
 /******/ 			"assets/css/pages/home": 0,
+/******/ 			"assets/css/layout": 0,
 /******/ 			"assets/css/pages/term-conditions": 0,
 /******/ 			"assets/css/pages/thankyou": 0,
 /******/ 			"assets/css/pages/404": 0,
-/******/ 			"assets/css/layout": 0,
 /******/ 			"assets/css/admin/colorScheme-client": 0,
 /******/ 			"assets/css/admin/colorScheme-tmdr": 0,
 /******/ 			"assets/css/admin/login": 0
@@ -6109,15 +6138,15 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/layout","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/js/layout.js")))
-/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/layout","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/layout.scss")))
-/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/layout","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/pages/404.scss")))
-/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/layout","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/pages/home.scss")))
-/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/layout","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/pages/thankyou.scss")))
-/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/layout","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/pages/term-conditions.scss")))
-/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/layout","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/admin/login.scss")))
-/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/layout","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/admin/colorScheme-tmdr.scss")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/layout","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/admin/colorScheme-client.scss")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/layout","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/js/layout.js")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/layout","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/layout.scss")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/layout","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/pages/404.scss")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/layout","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/pages/home.scss")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/layout","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/pages/thankyou.scss")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/layout","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/pages/term-conditions.scss")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/layout","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/admin/login.scss")))
+/******/ 	__webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/layout","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/admin/colorScheme-tmdr.scss")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["assets/css/pages/home","assets/css/layout","assets/css/pages/term-conditions","assets/css/pages/thankyou","assets/css/pages/404","assets/css/admin/colorScheme-client","assets/css/admin/colorScheme-tmdr","assets/css/admin/login"], () => (__webpack_require__("./source/scss/admin/colorScheme-client.scss")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

@@ -6,8 +6,9 @@
         <h2 class="section__title" data-aos="fade-up"><?php echo esc_html($sectionTitle);?></h2>
         <div class="maps__holder" data-aos="fade-up">
             <div id="customMap" class="maps__container"></div>
-            <div id="mapSidebar" class="maps__sidebar"></div>
+            <div id="mapSidebar" class="maps__sidebar maps__sidebar-desktop"></div>
         </div>
+        <div id="mapSidebarMobile" class="maps__sidebar maps__sidebar-mobile"></div>
     </div>
 </section>
 

@@ -91,6 +91,7 @@ function custom_minimal_checkout_fields($fields) {
     return $fields;
 }
 
+
 // add nationality in billing info
 add_action('woocommerce_checkout_update_order_meta', 'save_custom_nationality_field');
 function save_custom_nationality_field($order_id) {
@@ -137,23 +138,23 @@ remove_action('woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_f
 
 
 // clear cart if from checkout back to booking page
-add_action('template_redirect', 'custom_handle_clear_cart_redirect');
-function custom_handle_clear_cart_redirect() {
-    if ( isset($_GET['clear-cart']) && $_GET['clear-cart'] == '1' ) {
-        if ( WC()->cart ) {
-            WC()->cart->empty_cart();
-        }
+// add_action('template_redirect', 'custom_handle_clear_cart_redirect');
+// function custom_handle_clear_cart_redirect() {
+//     if ( isset($_GET['clear-cart']) && $_GET['clear-cart'] == '1' ) {
+//         if ( WC()->cart ) {
+//             WC()->cart->empty_cart();
+//         }
 
-        if ( is_product() ) {
-            // Redirect to the product page without the query string
-            wp_safe_redirect( get_permalink() );
-        } else {
-            // Redirect to home page
-            wp_safe_redirect( home_url() );
-        }
-        exit;
-    }
-}
+//         if ( is_product() ) {
+//             // Redirect to the product page without the query string
+//             wp_safe_redirect( get_permalink() );
+//         } else {
+//             // Redirect to home page
+//             wp_safe_redirect( home_url() );
+//         }
+//         exit;
+//     }
+// }
 
 
 
@@ -177,4 +178,48 @@ add_filter('woocommerce_order_number', 'custom_woocommerce_order_number', 10, 2)
 function custom_woocommerce_order_number($order_number, $order) {
     $prefix = 'HKR-WEB-';
     return $prefix . $order->get_id();
+}
+
+
+// only use the newest cart, the old will replace
+add_filter('woocommerce_add_to_cart_validation', 'force_single_cart_item_always', 99, 3);
+function force_single_cart_item_always($passed, $product_id, $quantity) {
+    // Always empty the cart before adding any new item (even same variation)
+    WC()->cart->empty_cart();
+    return $passed;
+}
+
+
+// custom API for email
+add_action('rest_api_init', function () {
+    register_rest_route('custom/v1', '/send-email/', array(
+        'methods' => 'POST',
+        'callback' => 'custom_send_email_endpoint',
+        'permission_callback' => '__return_true',
+    ));
+});
+
+function custom_send_email_endpoint($request) {
+    $params = $request->get_json_params();
+
+    $order_id = $params['order_id'] ?? null;
+
+    if (!$order_id) {
+        return new WP_REST_Response(['message' => 'Missing order_id'], 400);
+    }
+
+    $order = wc_get_order($order_id);
+    if (!$order) {
+        return new WP_REST_Response(['message' => 'Order not found'], 404);
+    }
+
+    // Contoh email
+    $to = $order->get_billing_email();
+    $subject = 'Pesanan Anda Diproses dari API!';
+    $body = 'Halo ' . $order->get_billing_first_name() . ', pesanan Anda sedang kami proses.';
+    $headers = array('Content-Type: text/html; charset=UTF-8');
+
+    wp_mail($to, $subject, $body, $headers);
+
+    return new WP_REST_Response(['message' => 'Email sent successfully.'], 200);
 }

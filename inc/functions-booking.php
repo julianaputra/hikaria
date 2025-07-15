@@ -19,7 +19,7 @@ function custom_booking_form_fields() {
                 <option value="">Estimated Time of Arrival</option>
                 <?php
                 $start = new DateTime('18:30');
-                $end = new DateTime('21:30');
+                $end = new DateTime('21:00');
                 while ($start <= $end) {
                     $label = $start->format('g:i A');
                     $value = $start->format('H:i');
@@ -104,10 +104,10 @@ function custom_booking_form_fields() {
             document.querySelector('#booking_data').value = JSON.stringify(booking);
 
             // Disable or enable PLACE ORDER button
-            const placeOrderBtn = document.querySelector('button[name="add-to-cart"]');
-            if (placeOrderBtn) {
-                placeOrderBtn.disabled = totalQty === 0;
-            }
+            // const placeOrderBtn = document.querySelector('button[name="add-to-cart"]');
+            // if (placeOrderBtn) {
+            //     placeOrderBtn.disabled = totalQty === 0;
+            // }
         }
 
         document.querySelectorAll('.ticket-row').forEach(row => {
@@ -160,38 +160,31 @@ function custom_booking_form_fields() {
         dateInput.setAttribute('min', minDateStr);
 
         // Prevent form submission if total is 0
-        const form = document.querySelector('form.cart');
-        if (form) {
-            form.addEventListener('submit', function (e) {
-                const dateInput = document.querySelector('input[name="visit_date"]');
-                const timeSelect = document.querySelector('select[name="estimated_time"]');
+        const form = document.querySelector('form.cart'); // WooCommerce uses form.cart on product page
+        form.addEventListener('submit', function (e) {
+            const totalQty = Array.from(document.querySelectorAll('.ticket-row input')).reduce((acc, input) => {
+                return acc + parseInt(input.value || 0);
+            }, 0);
 
-                const visitDate = dateInput.value;
-                const estimatedTime = timeSelect.value;
+            if (totalQty === 0) {
+                e.preventDefault();
 
-                const totalQty = Array.from(document.querySelectorAll('.ticket-row input'))
-                    .reduce((sum, input) => sum + parseInt(input.value), 0);
+                // Show tooltip or alert message
+                const localGroup = document.querySelector('.ticket-group:last-child');
+                if (localGroup) {
+                    // Remove existing tooltip if any
+                    const existingTooltip = document.querySelector('.ticket-tooltip');
+                    if (existingTooltip) existingTooltip.remove();
 
-                let errorMessages = [];
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'ticket-tooltip';
+                    tooltip.textContent = 'Please select at least 1 ticket before placing order.';
+                    localGroup.appendChild(tooltip);
 
-                if (!visitDate) {
-                    errorMessages.push("Please select a visit date.");
+                    // setTimeout(() => tooltip.remove(), 4000);
                 }
-
-                if (!estimatedTime) {
-                    errorMessages.push("Please select an estimated time of arrival.");
-                }
-
-                if (totalQty === 0) {
-                    errorMessages.push("Please select at least 1 ticket.");
-                }
-
-                if (errorMessages.length > 0) {
-                    e.preventDefault();
-                    alert(errorMessages.join('\n'));
-                }
-            });
-        }
+            }
+        });
     });
     </script>
     <?php
@@ -342,14 +335,14 @@ function send_order_to_google_sheet($order_id) {
                 if (preg_match('/(\d+)\s×\s(\w+)\s\((\w+)\)/', $meta->value, $matches)) {
                     $qty = (int)$matches[1];
                     $age = strtolower($matches[2]);
-                    $nationality = strtolower($matches[3]);
+                    $category = strtolower($matches[3]);
 
                     $total_pax += $qty;
 
-                    if ($age === 'adult' && $nationality === 'local') $adult_local += $qty;
-                    if ($age === 'adult' && $nationality === 'international') $adult_international += $qty;
-                    if ($age === 'child' && $nationality === 'local') $child_local += $qty;
-                    if ($age === 'child' && $nationality === 'international') $child_international += $qty;
+                    if ($age === 'adult' && $category === 'local') $adult_local += $qty;
+                    if ($age === 'adult' && $category === 'international') $adult_international += $qty;
+                    if ($age === 'child' && $category === 'local') $child_local += $qty;
+                    if ($age === 'child' && $category === 'international') $child_international += $qty;
                 }
             }
         }
@@ -373,6 +366,8 @@ function send_order_to_google_sheet($order_id) {
     $discount_total = $order->get_discount_total();
     $total_price    = $order->get_subtotal();
     $net_price      = $order->get_total();
+    $nationality    = get_post_meta($order_id, '_billing_nationality', true);
+
 
     // Get real Midtrans payment method via API
     $payment_method = $order->get_payment_method_title();
@@ -390,6 +385,7 @@ function send_order_to_google_sheet($order_id) {
         'customer_name'     => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
         'email'             => $order->get_billing_email(),
         'phone'             => $order->get_billing_phone(),
+        'nationality'       => $nationality,
         'visit_date'        => $visit_date,
         'estimated_time'    => $estimated_time,
         'payment_status'    => $order->get_status(),
@@ -406,7 +402,7 @@ function send_order_to_google_sheet($order_id) {
         'net_price'         => $net_price,
     ];
 
-    $url = 'https://script.google.com/macros/s/AKfycbxONIPXCJMfedGRJpRW4ZE2rvnD-Bsn5kfRC4i87keSLIy2IyYzVMWY3AOyrEd3pW9S/exec';
+    $url = 'https://script.google.com/macros/s/AKfycbz6XMOsVtd8EWjyiPrTlBacejBDQEyFwoObJ1punDPN611iY7OgbIq47-RLrkHXNFkw/exec';
 
     wp_remote_post($url, [
         'method'      => 'POST',
@@ -454,7 +450,7 @@ function update_payment_status_to_google_sheet($order_id) {
         'payment_status'    => 'completed',
     ];
 
-    $url = 'https://script.google.com/macros/s/AKfycbxONIPXCJMfedGRJpRW4ZE2rvnD-Bsn5kfRC4i87keSLIy2IyYzVMWY3AOyrEd3pW9S/exec';
+    $url = 'https://script.google.com/macros/s/AKfycbz6XMOsVtd8EWjyiPrTlBacejBDQEyFwoObJ1punDPN611iY7OgbIq47-RLrkHXNFkw/exec';
     wp_remote_post($url, [
         'method'    => 'POST',
         'body'      => json_encode($data),
@@ -476,7 +472,7 @@ function update_google_sheet_on_failed_payment($order_id) {
         'payment_status' => $order->get_status(),
     ];
 
-    $url = 'https://script.google.com/macros/s/AKfycbxONIPXCJMfedGRJpRW4ZE2rvnD-Bsn5kfRC4i87keSLIy2IyYzVMWY3AOyrEd3pW9S/exec';
+    $url = 'https://script.google.com/macros/s/AKfycbz6XMOsVtd8EWjyiPrTlBacejBDQEyFwoObJ1punDPN611iY7OgbIq47-RLrkHXNFkw/exec';
     wp_remote_post($url, [
         'method'    => 'POST',
         'body'      => json_encode($data),

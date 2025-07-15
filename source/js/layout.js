@@ -5,7 +5,6 @@ import { slideUp, slideDown, slideToggle, fadeOut, fadeIn, fadeToggle } from './
 import Offcanvas from 'bootstrap/js/dist/offcanvas';
 import Modal from 'bootstrap/js/dist/modal';
 import Tabs from 'bootstrap/js/dist/tab';
-import intlTelInput from 'intl-tel-input';
 
 /**
  * Coding Standards
@@ -97,26 +96,62 @@ document.addEventListener('DOMContentLoaded', () => {
     navbarMegaMenu()
 });
 
-document.addEventListener('DOMContentLoaded', function () {
+// Setup country code
+import intlTelInput from 'intl-tel-input';
+
+function initIntlTelInput() {
     const phoneInput = document.querySelector('#billing_phone');
-    if (!phoneInput) return;
+    if (!phoneInput) {
+        console.warn('No #billing_phone field found.');
+        return;
+    }
+
+    if (phoneInput.classList.contains('iti-initialized')) return;
+    phoneInput.classList.add('iti-initialized');
 
     const iti = intlTelInput(phoneInput, {
         initialCountry: 'id',
         preferredCountries: ['id', 'sg', 'my', 'us', 'gb'],
-        utilsScript: 'intl-tel-input/build/js/utils.js',
         nationalMode: false,
         autoPlaceholder: 'polite',
         formatOnDisplay: true,
-        flagsImagePath: '/wp-content/themes/tmdrxhikaria/assets/intl-tel-input/img/flags.webp'
+        utilsScript: '/wp-content/themes/tmdrxhikaria/assets/js/utils.js'
     });
 
-    const form = document.querySelector('form.checkout');
-    if (form) {
-        form.addEventListener('submit', function (e) {
-            if (iti.isValidNumber()) {
-                phoneInput.value = iti.getNumber();
+    window.iti = iti;
+
+    iti.promise.then(() => {
+        // Ambil raw input dan parse ke format internasional
+        const raw = phoneInput.value.trim();
+        const parsed = raw.startsWith('+') ? raw : '+62' + raw;
+        iti.setNumber(parsed);
+
+        console.log('Formatted Number:', iti.getNumber());
+
+        const form = document.querySelector('form.checkout');
+        if (form) {
+            form.addEventListener('submit', () => {
+                const rawSubmit = phoneInput.value.trim();
+                const parsedSubmit = rawSubmit.startsWith('+') ? rawSubmit : '+62' + rawSubmit;
+                iti.setNumber(parsedSubmit);
+
+                if (iti.isValidNumber()) {
+                    phoneInput.value = iti.getNumber();
+                } else {
+                    console.warn('Invalid number format');
+                }
+            });
+        }
+
+        // Auto insert country dial code on change if input is empty
+        phoneInput.addEventListener('countrychange', () => {
+            if (phoneInput.value.trim() === '') {
+                const dialCode = iti.getSelectedCountryData().dialCode;
+                phoneInput.value = `+${dialCode}`;
             }
         });
-    }
-});
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initIntlTelInput);
+jQuery(document.body).on('updated_checkout', initIntlTelInput);

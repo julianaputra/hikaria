@@ -7,6 +7,12 @@
         ?>
         <div class="offcanvas offcanvas-end custom-navbar__offcanvas" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header custom-navbar__offcanvas-header">
+                <?php
+                    $footerLogo = get_field('footer_logo', 'general-setting');
+                ?>
+                <a href="<?php echo home_url(); ?>" class="custom-navbar__logo-container custom-navbar__logo-mobile" rel="home">
+                    <img src="<?php echo esc_url($footerLogo['url']);?>" class="ratio-item" alt="Hikaria">
+                </a>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body custom-navbar__offcanvas-body">
@@ -21,6 +27,7 @@
                         );
                         wp_nav_menu( $args );
                     ?>
+                    <?php components('ThemeButton') ?>
                 </ul>
             </div>
         </div>

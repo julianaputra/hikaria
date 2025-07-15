@@ -48,6 +48,11 @@
             @include vwUnit(width, 112);
         }
     }
+    &__big-holder {
+        @media (max-width: 767.98px) {
+            @include vwMobile(margin-bottom, 20);
+        }
+    }
     .big {
         @include vwUnit(margin-bottom, 20);
     } 

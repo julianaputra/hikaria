@@ -16,7 +16,7 @@
 @use 'components/TheWoocommerceCustom';
 
 // country code js
-@use '../../node_modules/intl-tel-input/build/css/intlTelInput.css';
+@import '../../node_modules/intl-tel-input/build/css/intlTelInput.css';
 
 
 // |‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾| //

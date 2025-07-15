@@ -8,7 +8,7 @@
         <div class="footer__top">
             <div class="row">
                 <div class="col-md-3">
-                    <a href="<?php echo get_home_url() ?>/?clear-cart=1" class="footer__logo-container">
+                    <a href="<?php echo get_home_url() ?>" class="footer__logo-container">
                         <img src="<?php echo esc_url($footerLogo['url']);?>" alt="Hikaria Logo" class="ratio-item">
                     </a>
                 </div>

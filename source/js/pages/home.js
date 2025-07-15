@@ -100,19 +100,38 @@ document.addEventListener('DOMContentLoaded', function () {
     L.marker([pin.coordinates.y, pin.coordinates.x], { icon: customIcon })
       .addTo(map)
       .on('click', () => {
-        const sidebar = document.getElementById('mapSidebar');
-        sidebar.innerHTML = `
-          <button id="mapSidebarCloseBtn" class="maps__close">×</button>
-          <img src="${pin.image}" alt="${pin.title}" class="maps__image">
-          <div class="maps__text">
-            <h4 class="maps__title">${pin.title}</h4>
-            <div class="maps__desc">${pin.description}</div>
-          </div>
-        `;
-        sidebar.style.display = 'block';
-        document.getElementById('mapSidebarCloseBtn').addEventListener('click', () => {
-          sidebar.style.display = 'none';
-        });
+        if (window.innerWidth >= 992) {
+          const sidebar = document.getElementById('mapSidebar');
+          sidebar.innerHTML = `
+            <button id="mapSidebarCloseBtn" class="maps__close">×</button>
+            <img src="${pin.image}" alt="${pin.title}" class="maps__image">
+            <div class="maps__text">
+              <h4 class="maps__title">${pin.title}</h4>
+              <div class="maps__desc">${pin.description}</div>
+            </div>
+          `;
+          sidebar.style.display = 'block';
+          document.getElementById('mapSidebarCloseBtn').addEventListener('click', () => {
+            sidebar.style.display = 'none';
+          });
+        } else {
+          const sidebar = document.getElementById('mapSidebarMobile');
+          const body = document.querySelector('body');
+          sidebar.innerHTML = `
+            <button id="mapSidebarCloseBtn" class="maps__close">×</button>
+            <img src="${pin.image}" alt="${pin.title}" class="maps__image">
+            <div class="maps__text">
+              <h4 class="maps__title">${pin.title}</h4>
+              <div class="maps__desc">${pin.description}</div>
+            </div>
+          `;
+          sidebar.style.display = 'block';
+          body.classList.add('mapOpen');
+          document.getElementById('mapSidebarCloseBtn').addEventListener('click', () => {
+            sidebar.style.display = 'none';
+            body.classList.remove('mapOpen');
+          });
+        }
       });
 
       map.on('click', () => {

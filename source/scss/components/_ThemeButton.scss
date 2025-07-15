@@ -7,7 +7,7 @@
     @include vwUnit('padding', 15 20);
     @include typo(paragraph-sm);
     font-weight: 400;
-    background-image: linear-gradient(color(green));
+    background-image: linear-gradient(color(green), color(green));
     border-radius: 6px;
     border: 0;
     outline: 0;

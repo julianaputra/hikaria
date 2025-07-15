@@ -12,6 +12,7 @@ $order_id = $order->get_id();
 foreach ($order->get_items() as $item) {
     $visit_date = $item->get_meta('Date of Visit') ?: $order->get_date_created()->date('Y-m-d');
     $booking = $item->get_meta('booking_data');
+    $estimated_time = $item->get_meta('estimated_time');
 
     if ($booking) {
         $customer_data = json_decode($booking, true);
@@ -32,7 +33,7 @@ foreach ($order->get_items() as $item) {
                         <tr>
                             <!-- Logo -->
                             <td style="width: 25%; background-color: #000; text-align: center; padding: 10px; vertical-align: middle;">
-                                <img src="http://woo-ticket.test/wp-content/uploads/2025/06/hikaria.png" alt="Hikaria Logo" style="max-width: 80px;">
+                                <img src="https://dev.hikaria.id/wp-content/uploads/2025/06/default-logo.svg" alt="Hikaria Logo" style="max-width: 80px;">
                             </td>
 
                             <!-- Ticket Info -->
@@ -40,7 +41,8 @@ foreach ($order->get_items() as $item) {
                                 <strong>Ticket Number:</strong> <?php echo esc_html($ticket_number); ?><br>
                                 <strong>Name:</strong> <?php echo esc_html($billing_name); ?><br>
                                 <strong>Customer:</strong> <?php echo esc_html("{$age} ({$nationality})"); ?><br>
-                                <strong>Visit Date:</strong> <?php echo esc_html($visit_date); ?>
+                                <strong>Visit Date:</strong> <?php echo esc_html($visit_date); ?><br>
+                                <strong>Estimated Time of Arrival:</strong> <?php echo esc_html($estimated_time); ?>
                             </td>
 
                             <!-- QR Code -->

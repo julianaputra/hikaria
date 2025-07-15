@@ -46,7 +46,7 @@ while ($i < $total):
                 <?php endforeach; ?>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 gallery__big-holder">
             <?php if (!empty($videos) && isset($videos[$video_index])):
                 $video = $videos[$video_index++];
                 ?>
@@ -65,7 +65,7 @@ while ($i < $total):
             <?php endif; ?>
         </div>
     <?php else: ?>
-        <div class="col-md-6">
+        <div class="col-md-6 gallery__big-holder">
             <?php if (!empty($videos) && isset($videos[$video_index])):
                 $video = $videos[$video_index++];
                 ?>

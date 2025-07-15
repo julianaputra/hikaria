@@ -36040,12 +36040,24 @@ document.addEventListener('DOMContentLoaded', function () {
     leaflet__WEBPACK_IMPORTED_MODULE_4___default().marker([pin.coordinates.y, pin.coordinates.x], {
       icon: customIcon
     }).addTo(map).on('click', function () {
-      var sidebar = document.getElementById('mapSidebar');
-      sidebar.innerHTML = "\n          <button id=\"mapSidebarCloseBtn\" class=\"maps__close\">\xD7</button>\n          <img src=\"".concat(pin.image, "\" alt=\"").concat(pin.title, "\" class=\"maps__image\">\n          <div class=\"maps__text\">\n            <h4 class=\"maps__title\">").concat(pin.title, "</h4>\n            <div class=\"maps__desc\">").concat(pin.description, "</div>\n          </div>\n        ");
-      sidebar.style.display = 'block';
-      document.getElementById('mapSidebarCloseBtn').addEventListener('click', function () {
-        sidebar.style.display = 'none';
-      });
+      if (window.innerWidth >= 992) {
+        var sidebar = document.getElementById('mapSidebar');
+        sidebar.innerHTML = "\n            <button id=\"mapSidebarCloseBtn\" class=\"maps__close\">\xD7</button>\n            <img src=\"".concat(pin.image, "\" alt=\"").concat(pin.title, "\" class=\"maps__image\">\n            <div class=\"maps__text\">\n              <h4 class=\"maps__title\">").concat(pin.title, "</h4>\n              <div class=\"maps__desc\">").concat(pin.description, "</div>\n            </div>\n          ");
+        sidebar.style.display = 'block';
+        document.getElementById('mapSidebarCloseBtn').addEventListener('click', function () {
+          sidebar.style.display = 'none';
+        });
+      } else {
+        var _sidebar = document.getElementById('mapSidebarMobile');
+        var body = document.querySelector('body');
+        _sidebar.innerHTML = "\n            <button id=\"mapSidebarCloseBtn\" class=\"maps__close\">\xD7</button>\n            <img src=\"".concat(pin.image, "\" alt=\"").concat(pin.title, "\" class=\"maps__image\">\n            <div class=\"maps__text\">\n              <h4 class=\"maps__title\">").concat(pin.title, "</h4>\n              <div class=\"maps__desc\">").concat(pin.description, "</div>\n            </div>\n          ");
+        _sidebar.style.display = 'block';
+        body.classList.add('mapOpen');
+        document.getElementById('mapSidebarCloseBtn').addEventListener('click', function () {
+          _sidebar.style.display = 'none';
+          body.classList.remove('mapOpen');
+        });
+      }
     });
     map.on('click', function () {
       var sidebar = document.getElementById('mapSidebar');
