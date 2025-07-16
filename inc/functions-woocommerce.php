@@ -199,27 +199,20 @@ add_action('rest_api_init', function () {
     ));
 });
 
-function custom_send_email_endpoint($request) {
-    $params = $request->get_json_params();
-
-    $order_id = $params['order_id'] ?? null;
-
-    if (!$order_id) {
-        return new WP_REST_Response(['message' => 'Missing order_id'], 400);
-    }
-
-    $order = wc_get_order($order_id);
-    if (!$order) {
-        return new WP_REST_Response(['message' => 'Order not found'], 404);
-    }
-
-    // Contoh email
-    $to = $order->get_billing_email();
+function custom_send_email_endpoint(\WP_REST_Request $request) {
+	$params = $request->get_json_params();
+	$email = sanitize_email($params['email'] ?? '');
+	
+    $to = $email;
     $subject = 'Pesanan Anda Diproses dari API!';
-    $body = 'Halo ' . $order->get_billing_first_name() . ', pesanan Anda sedang kami proses.';
+    $body = 'Halo, pesanan Anda sedang kami proses.';
     $headers = array('Content-Type: text/html; charset=UTF-8');
 
-    wp_mail($to, $subject, $body, $headers);
+    $sent = wp_mail($to, $subject, $body, $headers);
 
-    return new WP_REST_Response(['message' => 'Email sent successfully.'], 200);
+    if (!$sent) {
+        return new \WP_REST_Response(['message' => 'Failed to send email.'], 500);
+    } else {
+    	return new \WP_REST_Response(['message' => 'Email sent successfully.'], 200);
+	}
 }
