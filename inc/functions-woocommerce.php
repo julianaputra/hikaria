@@ -157,53 +157,27 @@ add_action('rest_api_init', function () {
 });
 
 function custom_send_email_endpoint($request) {
-    $params = $request->get_json_params();
+    $data = $request->get_json_params();
 
-    $order_id = $params['order_id'] ?? null;
-
-    if (!$order_id) {
-        return new WP_REST_Response(['message' => 'Missing order_id'], 400);
+    if (!$data || !isset($data['customer']['email'])) {
+        return new WP_REST_Response(['message' => 'Invalid data'], 400);
     }
 
-    $order = wc_get_order($order_id);
-    if (!$order) {
-        return new WP_REST_Response(['message' => 'Order not found'], 404);
+    $to = sanitize_email($data['customer']['email']);
+    $subject = 'Your Order Confirmation';
+
+    // Gunakan output buffering untuk include template sebagai string
+    ob_start();
+    include get_stylesheet_directory() . '/woocommerce/emails/custom-order-template.php';
+    $message = ob_get_clean();
+
+    $headers = ['Content-Type: text/html; charset=UTF-8'];
+
+    $mail_sent = wp_mail($to, $subject, $message, $headers);
+
+    if ($mail_sent) {
+        return new WP_REST_Response(['message' => 'Email sent successfully.'], 200);
+    } else {
+        return new WP_REST_Response(['message' => 'Failed to send email.'], 500);
     }
-
-    // Contoh email
-    $to = $order->get_billing_email();
-    $subject = 'Pesanan Anda Diproses dari API!';
-    $body = 'Halo ' . $order->get_billing_first_name() . ', pesanan Anda sedang kami proses.';
-    $headers = array('Content-Type: text/html; charset=UTF-8');
-
-    wp_mail($to, $subject, $body, $headers);
-
-    return new WP_REST_Response(['message' => 'Email sent successfully.'], 200);
-}
-
-// reset checkout field after place order
-add_filter('woocommerce_checkout_get_value', 'disable_checkout_field_prefill', 10, 2);
-function disable_checkout_field_prefill($value, $input) {
-    return '';
-}
-
-// remove default payment method in email
-add_filter( 'woocommerce_get_order_item_totals', 'customize_payment_info_everywhere', 20, 3 );
-function customize_payment_info_everywhere( $totals, $order, $tax_display ) {
-    // Remove default Payment Method
-    if ( isset( $totals['payment_method'] ) ) {
-        unset( $totals['payment_method'] );
-    }
-
-    // Add custom Midtrans Payment Type
-    $payment_type = get_midtrans_payment_type( $order->get_id() );
-
-    if ( $payment_type ) {
-        $totals['midtrans_payment_type'] = array(
-            'label' => __( 'Payment Method:', 'woocommerce' ),
-            'value' => ucfirst( str_replace( '_', ' ', $payment_type ) ),
-        );
-    }
-
-    return $totals;
 }
