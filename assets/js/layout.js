@@ -164,6 +164,19 @@ function initIntlTelInput() {
 document.addEventListener('DOMContentLoaded', initIntlTelInput);
 jQuery(document.body).on('updated_checkout', initIntlTelInput);
 
+// close navbar on click menu in mobile
+document.querySelectorAll('.custom-navbar .menu-item').forEach(function (item) {
+  item.addEventListener('click', function () {
+    if (window.innerWidth < 768) {
+      var offcanvasEl = document.querySelector('.offcanvas.show');
+      if (offcanvasEl) {
+        var bsOffcanvas = bootstrap_js_dist_offcanvas__WEBPACK_IMPORTED_MODULE_1___default().getInstance(offcanvasEl);
+        if (bsOffcanvas) bsOffcanvas.hide();
+      }
+    }
+  });
+});
+
 /***/ }),
 
 /***/ "./source/js/modules/transitions.js":

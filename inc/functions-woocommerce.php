@@ -109,53 +109,10 @@ function display_nationality_admin_order($order) {
     }
 }
 
-// Show Nationality on Thank You Page
-add_action('woocommerce_thankyou', 'display_nationality_on_thankyou', 20);
-function display_nationality_on_thankyou($order_id) {
-    $nationality = get_post_meta($order_id, '_billing_nationality', true);
-    if ($nationality) {
-        echo '<p class="woocommerce-nationality"><strong>Nationality:</strong> </br>' . esc_html($nationality) . '</p>';
-    }
-}
-
-// Show Nationality in WooCommerce Emails
-add_action('woocommerce_email_customer_details', 'display_nationality_in_email', 25, 4);
-function display_nationality_in_email($order, $sent_to_admin, $plain_text, $email) {
-    $nationality = get_post_meta($order->get_id(), '_billing_nationality', true);
-    if ($nationality) {
-        if ($plain_text) {
-            echo "\nNationality: " . $nationality . "\n";
-        } else {
-            echo '<p>' . esc_html($nationality) . '</p>';
-        }
-    }
-}
-
 
 // ================================================
 // remove coupon from default position
 remove_action('woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10);
-
-
-// clear cart if from checkout back to booking page
-// add_action('template_redirect', 'custom_handle_clear_cart_redirect');
-// function custom_handle_clear_cart_redirect() {
-//     if ( isset($_GET['clear-cart']) && $_GET['clear-cart'] == '1' ) {
-//         if ( WC()->cart ) {
-//             WC()->cart->empty_cart();
-//         }
-
-//         if ( is_product() ) {
-//             // Redirect to the product page without the query string
-//             wp_safe_redirect( get_permalink() );
-//         } else {
-//             // Redirect to home page
-//             wp_safe_redirect( home_url() );
-//         }
-//         exit;
-//     }
-// }
-
 
 
 // redirect cart page to 404
@@ -222,4 +179,31 @@ function custom_send_email_endpoint($request) {
     wp_mail($to, $subject, $body, $headers);
 
     return new WP_REST_Response(['message' => 'Email sent successfully.'], 200);
+}
+
+// reset checkout field after place order
+add_filter('woocommerce_checkout_get_value', 'disable_checkout_field_prefill', 10, 2);
+function disable_checkout_field_prefill($value, $input) {
+    return '';
+}
+
+// remove default payment method in email
+add_filter( 'woocommerce_get_order_item_totals', 'customize_payment_info_everywhere', 20, 3 );
+function customize_payment_info_everywhere( $totals, $order, $tax_display ) {
+    // Remove default Payment Method
+    if ( isset( $totals['payment_method'] ) ) {
+        unset( $totals['payment_method'] );
+    }
+
+    // Add custom Midtrans Payment Type
+    $payment_type = get_midtrans_payment_type( $order->get_id() );
+
+    if ( $payment_type ) {
+        $totals['midtrans_payment_type'] = array(
+            'label' => __( 'Payment Method:', 'woocommerce' ),
+            'value' => ucfirst( str_replace( '_', ' ', $payment_type ) ),
+        );
+    }
+
+    return $totals;
 }

@@ -155,3 +155,17 @@ function initIntlTelInput() {
 
 document.addEventListener('DOMContentLoaded', initIntlTelInput);
 jQuery(document.body).on('updated_checkout', initIntlTelInput);
+
+
+// close navbar on click menu in mobile
+document.querySelectorAll('.custom-navbar .menu-item').forEach(item => {
+    item.addEventListener('click', () => {
+        if (window.innerWidth < 768) {
+            const offcanvasEl = document.querySelector('.offcanvas.show');
+            if (offcanvasEl) {
+                const bsOffcanvas = Offcanvas.getInstance(offcanvasEl);
+                if (bsOffcanvas) bsOffcanvas.hide();
+            }
+        }
+    });
+});

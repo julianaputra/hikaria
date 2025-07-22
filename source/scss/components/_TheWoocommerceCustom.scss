@@ -121,6 +121,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         border-radius: 5px;
         left: 50%;
         transform: translateX(-50%);
+        z-index: 1;
+        @media (max-width: 1199.98px) {
+            top: 30px;
+            left: 10px;
+            transform: none;
+        }
         &::before {
             content: "";
             height: 15px;
@@ -618,6 +624,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
                 @include vwUnit(margin-top, 10);
             }
         }
+        .woocommerce-order-overview__payment-method {
+            display: none;
+        }
     }
     h2 {
         @include typo(h4);
@@ -722,6 +731,25 @@ input[type="date"]::-webkit-calendar-picker-indicator {
             }
         }
     }
+    .order-again {
+        @include vwUnit(margin-top, 30);
+        text-align: right;
+        a {
+            @include vwUnit(padding, 20 30);
+            font-weight: 400;
+            background-color: color(green);
+            border-radius: 6px;
+            border: 0;
+            outline: 0;
+            color: #000;
+            text-decoration: none;
+            text-align: center;
+            text-transform: uppercase;
+            transition: all 0.5s ease-out;
+            letter-spacing: 1px;
+            overflow: hidden;
+        }
+    }
 }
 .woocommerce-customer-details{
     display: none;
@@ -810,7 +838,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 #place_order,
-#pay-button {
+#pay-button,
+#payment-instruction-btn {
     display: inline-block;
     position: relative;
     @include vwUnit('padding', 15 20);
@@ -829,6 +858,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     overflow: hidden;
     cursor: pointer;
 }
+#payment-instruction {
+    p {
+        color: color(white);
+    }
+}
 
 .woocommerce-NoticeGroup-checkout {
     display: none;
@@ -838,4 +872,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
             text-decoration: none;
         }
     }
+}
+
+// safari
+input[type="tel"]::-webkit-contacts-auto-fill-button,
+input[type="tel"]::-webkit-inner-spin-button,
+input[type="tel"]::-webkit-calendar-picker-indicator {
+    display: none !important;
+    -webkit-appearance: none !important;
+}
+/* Hides spinner arrows in Safari and Chrome */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Hide spinner in Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
 }

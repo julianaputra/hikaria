@@ -1,5 +1,17 @@
-<div class="invoice-header" style="text-align: center; margin-bottom: 40px;">
-    <h1 class="invoice-title" style="font-size: 24px; font-weight: bold;">Hikaria Admission Tickets</h1>
+<div class="invoice-header">
+    <table style="width:100%; border: none; border-collapse: collapse; margin-bottom: 30px;">
+        <tr>
+            <td class="invoice-header__img-holder">
+                <img src="https://dev.hikaria.id/wp-content/uploads/2025/07/ticket-img.jpg" alt="Hikaria" style="border-radius: 5px;">
+            </td>
+            <td class="invoice-header__holder">
+                <img src="https://dev.hikaria.id/wp-content/uploads/2025/06/default-logo.svg" alt="Hikaria Logo" style="max-width: 80px; margin-bottom: 10px;">
+                <p class="invoice-header__web">www.hikaria.id</p>
+                <h1 class="invoice-header__heading">THE Cultural <br><span>Storytelling</span> <br>in BETWEEN Light</h1>
+                <p class="invoice-header__desc">GREEN KUBU RESTAURANT</p>
+            </td>
+        </tr>
+    </table>
 </div>
 
 <?php
@@ -29,25 +41,36 @@ foreach ($order->get_items() as $item) {
                 ?>
 
                 <div class="ticket" style="margin-bottom: 30px;">
-                    <table style="width:100%; border:1px solid #ccc; border-collapse: collapse;">
+                    <table style="width:100%; border: none; border-collapse: collapse;">
                         <tr>
-                            <!-- Logo -->
-                            <td style="width: 25%; background-color: #000; text-align: center; padding: 10px; vertical-align: middle;">
-                                <img src="https://dev.hikaria.id/wp-content/uploads/2025/06/default-logo.svg" alt="Hikaria Logo" style="max-width: 80px;">
-                            </td>
-
                             <!-- Ticket Info -->
-                            <td style="width: 50%; padding: 10px 10px 10px 30px; font-size: 14px; vertical-align: middle;">
-                                <strong>Ticket Number:</strong> <?php echo esc_html($ticket_number); ?><br>
-                                <strong>Name:</strong> <?php echo esc_html($billing_name); ?><br>
-                                <strong>Customer:</strong> <?php echo esc_html("{$age} ({$nationality})"); ?><br>
-                                <strong>Visit Date:</strong> <?php echo esc_html($visit_date); ?><br>
-                                <strong>Estimated Time of Arrival:</strong> <?php echo esc_html($estimated_time); ?>
+                            <td style="width: 74.5%; padding-right: 15px; font-size: 14px;">
+                                <div style="border: 1px solid #525252; border-radius: 5px; padding: 30px 15px;">
+                                    <span style="display: block; margin-bottom: 2px;"><strong>Ticket Number:</strong> <?php echo esc_html($ticket_number); ?></span>
+                                    <span style="display: block; margin-bottom: 2px;"><strong>Name:</strong> <?php echo esc_html($billing_name); ?></span>
+                                    <span style="display: block; margin-bottom: 2px;"><strong>Customer:</strong> <?php echo esc_html("{$age} ({$nationality})"); ?></span>
+                                    <span style="display: block; margin-bottom: 2px;"><strong>Visit Date:</strong> <?php echo esc_html($visit_date); ?></span>
+                                    <span style="display: block; margin-bottom: 2px;"><strong>Estimated Time of Arrival:</strong> <?php echo esc_html($estimated_time); ?></span>
+                                </div>
                             </td>
+                            <td style="width: 0.5%"></td>
 
                             <!-- QR Code -->
-                            <td style="width: 25%; text-align: right; padding: 10px;">
-                                <img src="<?php echo esc_url($qr_url); ?>" alt="QR Code" style="max-width: 100px;">
+                            <td style="width: 25%; text-align: center; padding: 0;">
+                                <div style="border: 1px solid #525252; border-radius: 5px; padding: 22px 15px;">
+                                    <img src="<?php echo esc_url($qr_url); ?>" alt="QR Code" style="width: 90%; height: auto;">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="border-bottom: 1px dashed #ccc; padding-top: 25px; width: 100%;"></div>
+                            </td>
+                            <td>
+                                <div style="border-bottom: 1px dashed #ccc; padding-top: 25px; width: 100%;"></div>
+                            </td>
+                            <td>
+                                <div style="border-bottom: 1px dashed #ccc; padding-top: 25px; width: 100%;"></div>
                             </td>
                         </tr>
                     </table>

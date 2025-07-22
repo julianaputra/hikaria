@@ -327,3 +327,61 @@ table.totals tr.payment_method {
 .pagenum,.pagecount {
 	font-family: sans-serif;
 }
+
+/* custom css */
+.invoice-header__row {
+	display: flex;
+    flex-wrap: wrap;
+	margin-left: -15px;
+	margin-right: -15px;
+}
+.invoice-header__col-4 {
+	flex: 0 0 auto;
+	width: 33.33333333%;
+}
+.invoice-header__col-8 {
+	flex: 0 0 auto;
+	width: 66.66666667%;
+}
+.invoice-header__img-holder {
+	padding: 0 15px;
+}
+.invoice-header__holder {
+	padding: 20px;
+}
+.invoice-header__img-holder {
+	padding-left: 0;
+    width: 33%;
+}
+.invoice-header__img-holder img{
+	height: auto;
+    width: 100%;
+}
+.invoice-header__holder {
+	background: #14294F;
+	border-radius: 5px;
+}
+.invoice-header__web {
+	font-weight: 500;
+	font-size: 8px;
+	color: #fff;
+	text-transform: uppercase;
+}
+.invoice-header__heading {
+	font-weight: 700;
+    font-size: 22px;
+    color: #fff;
+    display: block;
+    line-height: 0.8;
+    text-transform: uppercase;
+	margin: 5px 0;
+}
+.invoice-header__heading span {
+	color: #D5E602;
+}
+.invoice-header__desc {
+	font-weight: 700;
+	font-size: 12px;
+	color: #34F461;
+	text-transform: uppercase;
+}

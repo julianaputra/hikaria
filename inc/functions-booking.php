@@ -181,7 +181,7 @@ function custom_booking_form_fields() {
                     tooltip.textContent = 'Please select at least 1 ticket before placing order.';
                     localGroup.appendChild(tooltip);
 
-                    // setTimeout(() => tooltip.remove(), 4000);
+                    setTimeout(() => tooltip.remove(), 5000);
                 }
             }
         });
@@ -270,7 +270,6 @@ add_action('woocommerce_checkout_create_order', function($order, $data) {
 }, 10, 2);
 
 // 5. Add to Order Item Meta
-
 add_action('woocommerce_checkout_create_order_line_item', function($item, $cart_item_key, $values, $order) {
     if (!empty($values['visit_date'])) {
         $item->add_meta_data('Date of Visit', $values['visit_date']);
@@ -416,27 +415,32 @@ function send_order_to_google_sheet($order_id) {
 }
 
 // 8.Query Midtrans for actual payment_type
-function get_midtrans_payment_type($order_id) {
-    $server_key = 'SB-Mid-server-uv1lWe_HsJoeBu5R4EnFTjOR';
+function get_midtrans_payment_type( $order_id ) {
+    $server_key = 'SB-Mid-server-XXXXXXXXXXXXXXXXXXXX'; // Replace with your Midtrans Server Key
     $is_sandbox = true;
 
     $url = $is_sandbox
         ? "https://api.sandbox.midtrans.com/v2/{$order_id}/status"
         : "https://api.midtrans.com/v2/{$order_id}/status";
 
-    $response = wp_remote_get($url, [
-        'headers' => [
-            'Authorization' => 'Basic ' . base64_encode($server_key . ':')
-        ]
-    ]);
+    $auth = base64_encode( $server_key . ':' );
 
-    if (!is_wp_error($response)) {
-        $body = json_decode(wp_remote_retrieve_body($response), true);
-        return $body['payment_type'] ?? null;
+    $response = wp_remote_get( $url, array(
+        'headers' => array(
+            'Authorization' => 'Basic ' . $auth,
+            'Accept'        => 'application/json',
+        ),
+        'timeout' => 20,
+    ) );
+
+    if ( is_wp_error( $response ) ) {
+        return null;
     }
 
-    return null;
+    $body = json_decode( wp_remote_retrieve_body( $response ), true );
+    return isset( $body['payment_type'] ) ? $body['payment_type'] : null;
 }
+
 
 // 9. change payment status if complate
 add_action('woocommerce_order_status_completed', 'update_payment_status_to_google_sheet');
