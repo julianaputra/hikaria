@@ -201,5 +201,4 @@ foreach ( $items as $item_id => $item ) :
 		<?php
 	}
 	?>
-
 <?php endforeach; ?>

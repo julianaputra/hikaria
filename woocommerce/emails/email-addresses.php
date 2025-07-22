@@ -26,13 +26,31 @@ $shipping = $order->get_formatted_shipping_address();
 
 $email_improvements_enabled = FeaturesUtil::feature_is_enabled( 'email_improvements' );
 
-?><table id="addresses" cellspacing="0" cellpadding="0" style="width: 100%; vertical-align: top; margin-bottom: <?php echo $email_improvements_enabled ? '0' : '40px'; ?>; padding:0;" border="0">
+?>
+<table id="venue" cellspacing="0" cellpadding="0" style="width: 100%; border:0; margin-bottom: 40px;">
+	<tbody>
+		<tr>
+			<td style="padding: 0;">
+				<h2 style="text-transform: uppercase; font-weight: 700; margin-bottom: 0; font-size: 18px;">Venue</h2>
+			</td>
+		</tr>
+		<tr>
+			<td style="padding: 0;">Greenkubu Restaurant and Swing, Br, Jl. Pejengaji, Tegallalang, Gianyar Regency, Bali 80561</td>
+		</tr>
+		<tr>
+			<td style="padding: 0;">
+				<a href="https://www.google.com/maps/place/Greenkubu+Restaurant+and+Swing/@-8.4520721,115.2716879,17z/data=!3m1!4b1!4m6!3m5!1s0x2dd22284e4af9543:0x7a8c99e9dbdc880f!8m2!3d-8.4520774!4d115.2742628!16s%2Fg%2F11dz161zrk?entry=ttu&g_ep=EgoyMDI1MDcxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" style="text-decoration: underline; color:#14294F; font-weight: 700;">Open Maps</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<table id="addresses" cellspacing="0" cellpadding="0" style="width: 100%; vertical-align: top; margin-bottom: <?php echo $email_improvements_enabled ? '0' : '40px'; ?>; padding:0;" border="0">		
 	<tr>
 		<td class="font-family text-align-left" style="border:0; padding:0;" valign="top" width="50%">
 			<?php if ( $email_improvements_enabled ) { ?>
-				<b class="address-title" style="text-transform: uppercase;"><?php esc_html_e( 'Billing address', 'woocommerce' ); ?></b>
+				<b class="address-title" style="text-transform: uppercase; margin-top: 40px;"><?php esc_html_e( 'Billing address', 'woocommerce' ); ?></b>
 			<?php } else { ?>
-				<h2 style="text-transform: uppercase;"><?php esc_html_e( 'Billing address', 'woocommerce' ); ?></h2>
+				<h2 style="text-transform: uppercase; margin-top: 40px;"><?php esc_html_e( 'Billing address', 'woocommerce' ); ?></h2>
 			<?php } ?>
 
 			<address class="address">

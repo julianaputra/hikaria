@@ -144,6 +144,14 @@ function custom_booking_form_fields() {
             });
         }
 
+        if (dateInput) {
+            dateInput.addEventListener('click', function (e) {
+                if (typeof dateInput.showPicker === 'function') {
+                    dateInput.showPicker();
+                }
+            });
+        }
+
         // Apply WITA-based minimum date
         const now = new Date();
         const witaOffset = 8 * 60;
