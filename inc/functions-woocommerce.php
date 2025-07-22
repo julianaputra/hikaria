@@ -199,20 +199,28 @@ add_action('rest_api_init', function () {
     ));
 });
 
-function custom_send_email_endpoint(\WP_REST_Request $request) {
-	$params = $request->get_json_params();
-	$email = sanitize_email($params['email'] ?? '');
-	
-    $to = $email;
-    $subject = 'Pesanan Anda Diproses dari API!';
-    $body = 'Halo, pesanan Anda sedang kami proses.';
-    $headers = array('Content-Type: text/html; charset=UTF-8');
+function custom_send_email_endpoint($request) {
+    $data = $request->get_json_params();
 
-    $sent = wp_mail($to, $subject, $body, $headers);
+    if (!$data || !isset($data['customer']['email'])) {
+        return new WP_REST_Response(['message' => 'Invalid data'], 400);
+    }
 
-    if (!$sent) {
-        return new \WP_REST_Response(['message' => 'Failed to send email.'], 500);
+    $to = sanitize_email($data['customer']['email']);
+    $subject = 'Your Order Confirmation';
+
+    // Gunakan output buffering untuk include template sebagai string
+    ob_start();
+    include get_stylesheet_directory() . '/woocommerce/emails/custom-order-template.php';
+    $message = ob_get_clean();
+
+    $headers = ['Content-Type: text/html; charset=UTF-8'];
+
+    $mail_sent = wp_mail($to, $subject, $message, $headers);
+
+    if ($mail_sent) {
+        return new WP_REST_Response(['message' => 'Email sent successfully.'], 200);
     } else {
-    	return new \WP_REST_Response(['message' => 'Email sent successfully.'], 200);
-	}
+        return new WP_REST_Response(['message' => 'Failed to send email.'], 500);
+    }
 }
