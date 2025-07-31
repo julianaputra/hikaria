@@ -75,6 +75,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     &__time {
         .form-select {
             filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(4478%) hue-rotate(359deg) brightness(108%) contrast(98%);
+            @include typo(paragraph-sm);
         }
     }
     label {
@@ -106,6 +107,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         background-color: transparent;
         border-color: color(neutral, 500);
         color: color(neutral, 400);
+        @include typo(paragraph-sm);
     }
 }
 
@@ -167,10 +169,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-weight: 400;
     flex: 1;
     .ticket-sub {
-        font-size: 12px;
+        @include typo(paragraph-xxs);
         color: #aaa;
         margin-left: 4px;
-        @media (max-width: 767.98px) {
+        @media (max-width: 1199.98px) {
+            display: block;
+        }
+        @media (max-width: 991.98px) {
+            display: inline-block;
+        }
+        @media (max-width: 479.98px) {
             display: block;
         }
     }
@@ -221,7 +229,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     @include vwUnit(padding, 22 20);
     background-color: rgba(255, 255, 255, 0.05);
     &__title {
-        width: 60%;
+        width: 55%;
+        @include typo(paragraph-sm);
     }
 }
 .dynamic-price {
@@ -229,7 +238,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-weight: 700;
     @include typo(paragraph-sm);
     @include vwUnit(padding-right, 30);
-    @include vwUnit(width, 120);
 }
 
 // DEFAULT WOOCOMMERCE
@@ -264,6 +272,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 // CHECKOUT
 .checkout-page {
     // @include vwUnit(padding, 100 0);
+    color: color(white);
     &__title {
         @include typo(h4);
         text-transform: uppercase;
@@ -732,23 +741,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         }
     }
     .order-again {
-        @include vwUnit(margin-top, 30);
-        text-align: right;
-        a {
-            @include vwUnit(padding, 20 30);
-            font-weight: 400;
-            background-color: color(green);
-            border-radius: 6px;
-            border: 0;
-            outline: 0;
-            color: #000;
-            text-decoration: none;
-            text-align: center;
-            text-transform: uppercase;
-            transition: all 0.5s ease-out;
-            letter-spacing: 1px;
-            overflow: hidden;
-        }
+        display: none;
     }
 }
 .woocommerce-customer-details{
@@ -891,4 +884,11 @@ input[type="number"]::-webkit-outer-spin-button {
 /* Hide spinner in Firefox */
 input[type="number"] {
     -moz-appearance: textfield;
+}
+
+.woocommerce-form {
+    &__input-checkbox {
+        height: auto!important;
+        width: auto!important;
+    }
 }

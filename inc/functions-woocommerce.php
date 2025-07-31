@@ -146,6 +146,11 @@ function force_single_cart_item_always($passed, $product_id, $quantity) {
     return $passed;
 }
 
+// reset checkout form after order
+add_filter('woocommerce_checkout_get_value', 'disable_checkout_field_prefill', 10, 2);
+function disable_checkout_field_prefill($value, $input) {
+    return '';
+}
 
 // custom API for email
 add_action('rest_api_init', function () {
@@ -165,6 +170,14 @@ function custom_send_email_endpoint($request) {
 
     $to = sanitize_email($data['customer']['email']);
     $subject = 'Your Order Confirmation';
+	
+	$template_path = get_stylesheet_directory() . '/woocommerce/emails/custom-order-template.php';
+	error_log('Template path: ' . $template_path);
+
+	if (!file_exists($template_path)) {
+		error_log('Template file not found!');
+		return new WP_REST_Response(['message' => 'Email template not found.'], 500);
+	}
 
     // Gunakan output buffering untuk include template sebagai string
     ob_start();

@@ -152,20 +152,48 @@ function custom_booking_form_fields() {
             });
         }
 
-        // Apply WITA-based minimum date
-        const now = new Date();
-        const witaOffset = 8 * 60;
-        const localOffset = now.getTimezoneOffset();
-        const offsetDiff = witaOffset + localOffset;
-        const witaNow = new Date(now.getTime() + offsetDiff * 60 * 1000);
+        // // Apply WITA-based minimum date
+        // const now = new Date();
+        // const witaOffset = 8 * 60;
+        // const localOffset = now.getTimezoneOffset();
+        // const offsetDiff = witaOffset + localOffset;
+        // const witaNow = new Date(now.getTime() + offsetDiff * 60 * 1000);
 
-        let minDate = new Date(witaNow);
-        if (witaNow.getHours() >= 18) {
-            minDate.setDate(minDate.getDate() + 1);
+        // let minDate = new Date(witaNow);
+        // if (witaNow.getHours() >= 18) {
+        //     minDate.setDate(minDate.getDate() + 1);
+        // }
+
+        // const minDateStr = minDate.toISOString().split('T')[0];
+        // dateInput.setAttribute('min', minDateStr);
+
+        // set availabel date on 23 August and maximum until 6pm
+        if (dateInput) {
+            const today = new Date();
+
+            // Set WITA timezone offset (UTC+8)
+            const witaOffsetMinutes = 8 * 60;
+            const localOffsetMinutes = today.getTimezoneOffset(); // in minutes
+            const offsetDifference = (witaOffsetMinutes + localOffsetMinutes) * 60 * 1000;
+            const witaNow = new Date(today.getTime() + offsetDifference);
+
+            // Minimum hardcoded allowed date
+            const hardMin = new Date('2025-08-24T00:00:00+08:00');
+
+            // Final minDate = max(hardMin, dynamicTodayOrTomorrow)
+            let minDate = new Date(witaNow);
+            if (witaNow.getHours() >= 18) {
+                minDate.setDate(minDate.getDate() + 1);
+            }
+
+            // Enforce fixed start from August 23
+            if (minDate < hardMin) {
+                minDate = hardMin;
+            }
+
+            const minDateStr = minDate.toISOString().split('T')[0];
+            dateInput.setAttribute('min', minDateStr);
         }
-
-        const minDateStr = minDate.toISOString().split('T')[0];
-        dateInput.setAttribute('min', minDateStr);
 
         // Prevent form submission if total is 0
         const form = document.querySelector('form.cart'); // WooCommerce uses form.cart on product page
@@ -216,9 +244,10 @@ add_filter('woocommerce_add_cart_item_data', function($cart_item_data, $product_
 // 3. Show in Cart
 add_filter('woocommerce_get_item_data', function($item_data, $cart_item) {
     if (!empty($cart_item['visit_date'])) {
+        $formatted_date = date('d/m/Y', strtotime($cart_item['visit_date']));
         $item_data[] = [
             'key' => 'Date of Visit',
-            'value' => $cart_item['visit_date']
+            'value' => $formatted_date
         ];
     }
     if (!empty($cart_item['estimated_time'])) {
@@ -393,7 +422,7 @@ function send_order_to_google_sheet($order_id) {
         'email'             => $order->get_billing_email(),
         'phone'             => $order->get_billing_phone(),
         'nationality'       => $nationality,
-        'visit_date'        => $visit_date,
+        'visit_date'        => date('d/m/Y', strtotime($order->get_meta('visit_date'))),
         'estimated_time'    => $estimated_time,
         'payment_status'    => $order->get_status(),
         'booking_data'      => implode("\n", $booking_data_raw),

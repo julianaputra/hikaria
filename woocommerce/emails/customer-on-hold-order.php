@@ -75,7 +75,7 @@ do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_
 $payment_url = get_post_meta($order->get_id(), '_midtrans_snap_redirect_url', true);
 if ($payment_url) {
     echo '<h2>Payment Page</h2>';
-    echo '<p><a href="' . esc_url($payment_url) . '" style="color: #22cc88;">' . esc_html($payment_url) . '</a></p>';
+    echo '<p><a href="' . esc_url($payment_url) . '" style="color: #22cc88;">Pay Now</a></p>';
 }
 
 

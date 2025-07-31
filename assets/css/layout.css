@@ -1297,7 +1297,7 @@
     line-height: 160%;
   }
 }
-.fs-paragraph-sm, .booking-form label, .ticket-group__title, .ticket-label, .ticket-price, .ticket-controls button, .dynamic-price, .woocommerce-section__subtitle, .checkout-page label, .section-order-summary, .referral-code__title, .referral-code .button, .shop_table.woocommerce-checkout-review-order-table .info-col__title, .shop_table.woocommerce-checkout-review-order-table .info-col__date, .shop_table.woocommerce-checkout-review-order-table .info-col__time, .shop_table.woocommerce-checkout-review-order-table .info-col__customer, .shop_table.woocommerce-checkout-review-order-table .cart-subtotal th,
+.fs-paragraph-sm, .booking-form__time .form-select, .booking-form label, .booking-form .form-control, .ticket-group__title, .ticket-label, .ticket-price, .ticket-controls button, .ticket-total__title, .dynamic-price, .woocommerce-section__subtitle, .checkout-page label, .section-order-summary, .referral-code__title, .referral-code .button, .shop_table.woocommerce-checkout-review-order-table .info-col__title, .shop_table.woocommerce-checkout-review-order-table .info-col__date, .shop_table.woocommerce-checkout-review-order-table .info-col__time, .shop_table.woocommerce-checkout-review-order-table .info-col__customer, .shop_table.woocommerce-checkout-review-order-table .cart-subtotal th,
 .shop_table.woocommerce-checkout-review-order-table .order-total th,
 .shop_table.woocommerce-checkout-review-order-table .cart-discount th, .thank-you .woocommerce-thankyou-order-details li, .woocommerce-order-details .woocommerce-table thead th, .woocommerce-order-details .woocommerce-table tbody a, .woocommerce-order-details .woocommerce-table tbody ul li, .woocommerce-order-details .woocommerce-table tbody .product-total, .woocommerce-order-details .woocommerce-table tfoot th, .woocommerce-order-details .woocommerce-table tfoot td, .midtrans_payment_info th, .midtrans_payment_info td a, #place_order,
 #pay-button,
@@ -1306,7 +1306,7 @@
   line-height: 160%;
 }
 @media (max-width: 1199.98px) {
-  .fs-paragraph-sm, .booking-form label, .ticket-group__title, .ticket-label, .ticket-price, .ticket-controls button, .dynamic-price, .woocommerce-section__subtitle, .checkout-page label, .section-order-summary, .referral-code__title, .referral-code .button, .shop_table.woocommerce-checkout-review-order-table .info-col__title, .shop_table.woocommerce-checkout-review-order-table .info-col__date, .shop_table.woocommerce-checkout-review-order-table .info-col__time, .shop_table.woocommerce-checkout-review-order-table .info-col__customer, .shop_table.woocommerce-checkout-review-order-table .cart-subtotal th,
+  .fs-paragraph-sm, .booking-form__time .form-select, .booking-form label, .booking-form .form-control, .ticket-group__title, .ticket-label, .ticket-price, .ticket-controls button, .ticket-total__title, .dynamic-price, .woocommerce-section__subtitle, .checkout-page label, .section-order-summary, .referral-code__title, .referral-code .button, .shop_table.woocommerce-checkout-review-order-table .info-col__title, .shop_table.woocommerce-checkout-review-order-table .info-col__date, .shop_table.woocommerce-checkout-review-order-table .info-col__time, .shop_table.woocommerce-checkout-review-order-table .info-col__customer, .shop_table.woocommerce-checkout-review-order-table .cart-subtotal th,
   .shop_table.woocommerce-checkout-review-order-table .order-total th,
   .shop_table.woocommerce-checkout-review-order-table .cart-discount th, .thank-you .woocommerce-thankyou-order-details li, .woocommerce-order-details .woocommerce-table thead th, .woocommerce-order-details .woocommerce-table tbody a, .woocommerce-order-details .woocommerce-table tbody ul li, .woocommerce-order-details .woocommerce-table tbody .product-total, .woocommerce-order-details .woocommerce-table tfoot th, .woocommerce-order-details .woocommerce-table tfoot td, .midtrans_payment_info th, .midtrans_payment_info td a, #place_order,
   #pay-button,
@@ -1323,12 +1323,12 @@
     line-height: 160%;
   }
 }
-.fs-paragraph-xxs {
+.fs-paragraph-xxs, .ticket-label .ticket-sub {
   font-size: var(--tdfs-paragraph-xxs);
   line-height: 160%;
 }
 @media (max-width: 1199.98px) {
-  .fs-paragraph-xxs {
+  .fs-paragraph-xxs, .ticket-label .ticket-sub {
     line-height: 160%;
   }
 }
@@ -12606,7 +12606,6 @@ input[type=date]::-webkit-calendar-picker-indicator {
     height: 12.5vw;
   }
 }
-
 .ticket-options {
   display: flex;
   flex-direction: column;
@@ -12729,11 +12728,20 @@ input[type=date]::-webkit-calendar-picker-indicator {
   flex: 1;
 }
 .ticket-label .ticket-sub {
-  font-size: 12px;
   color: #aaa;
   margin-left: 4px;
 }
-@media (max-width: 767.98px) {
+@media (max-width: 1199.98px) {
+  .ticket-label .ticket-sub {
+    display: block;
+  }
+}
+@media (max-width: 991.98px) {
+  .ticket-label .ticket-sub {
+    display: inline-block;
+  }
+}
+@media (max-width: 479.98px) {
   .ticket-label .ticket-sub {
     display: block;
   }
@@ -12890,14 +12898,12 @@ input[type=date]::-webkit-calendar-picker-indicator {
   }
 }
 .ticket-total__title {
-  width: 60%;
+  width: 55%;
 }
-
 .dynamic-price {
   text-align: right;
   font-weight: 700;
   padding-right: 1.5625vw;
-  width: 6.25vw;
 }
 @media screen and (max-width: 1199.98px) {
   .dynamic-price {
@@ -12912,21 +12918,6 @@ input[type=date]::-webkit-calendar-picker-indicator {
 @media screen and (max-width: 480px) {
   .dynamic-price {
     padding-right: 6.25vw;
-  }
-}
-@media screen and (max-width: 1199.98px) {
-  .dynamic-price {
-    width: 10.0001666694vw;
-  }
-}
-@media screen and (max-width: 767px) {
-  .dynamic-price {
-    width: 15.6453715776vw;
-  }
-}
-@media screen and (max-width: 480px) {
-  .dynamic-price {
-    width: 25vw;
   }
 }
 
@@ -13003,6 +12994,9 @@ input[type=date]::-webkit-calendar-picker-indicator {
   }
 }
 
+.checkout-page {
+  color: #fff;
+}
 .checkout-page__title {
   text-transform: uppercase;
   font-weight: 500;
@@ -14169,53 +14163,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
   text-decoration: none;
 }
 .woocommerce-order-details .order-again {
-  margin-top: 1.5625vw;
-  text-align: right;
-}
-@media screen and (max-width: 1199.98px) {
-  .woocommerce-order-details .order-again {
-    margin-top: 2.5000416674vw;
-  }
-}
-@media screen and (max-width: 767px) {
-  .woocommerce-order-details .order-again {
-    margin-top: 3.9113428944vw;
-  }
-}
-@media screen and (max-width: 480px) {
-  .woocommerce-order-details .order-again {
-    margin-top: 6.25vw;
-  }
-}
-.woocommerce-order-details .order-again a {
-  padding: 1.0416666667vw 1.5625vw;
-  font-weight: 400;
-  background-color: #34F461;
-  border-radius: 6px;
-  border: 0;
-  outline: 0;
-  color: #000;
-  text-decoration: none;
-  text-align: center;
-  text-transform: uppercase;
-  transition: all 0.5s ease-out;
-  letter-spacing: 1px;
-  overflow: hidden;
-}
-@media screen and (max-width: 1199.98px) {
-  .woocommerce-order-details .order-again a {
-    padding: 1.6666944449vw 2.5000416674vw;
-  }
-}
-@media screen and (max-width: 767px) {
-  .woocommerce-order-details .order-again a {
-    padding: 2.6075619296vw 3.9113428944vw;
-  }
-}
-@media screen and (max-width: 480px) {
-  .woocommerce-order-details .order-again a {
-    padding: 4.1666666667vw 6.25vw;
-  }
+  display: none;
 }
 
 .woocommerce-customer-details {
@@ -14461,6 +14409,11 @@ input[type=number]::-webkit-outer-spin-button {
 /* Hide spinner in Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.woocommerce-form__input-checkbox {
+  height: auto !important;
+  width: auto !important;
 }
 
 /* root font-size variable -- start */

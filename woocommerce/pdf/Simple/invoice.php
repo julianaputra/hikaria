@@ -35,42 +35,102 @@ foreach ($order->get_items() as $item) {
             $quantity = (int)$customer['quantity'];
 
             for ($i = 1; $i <= $quantity; $i++) {
-                $ticket_number = "HKR-WEB-{$order_id}+#{$order_id}-{$ticket_counter}";
-                $qr_text = "{$ticket_number}";
+                $ticket_number = "HKR-WEB-{$order_id}";
+                $qr_text = "{$order_id}-{$ticket_counter}";
                 $qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=' . urlencode($qr_text);
+
+                // Zigzag condition
+                $is_left_qr = $ticket_counter % 2 !== 0;
                 ?>
 
                 <div class="ticket" style="margin-bottom: 30px;">
                     <table style="width:100%; border: none; border-collapse: collapse;">
                         <tr>
-                            <!-- Ticket Info -->
-                            <td style="width: 74.5%; padding-right: 15px; font-size: 14px;">
-                                <div style="border: 1px solid #525252; border-radius: 5px; padding: 30px 15px;">
-                                    <span style="display: block; margin-bottom: 2px;"><strong>Ticket Number:</strong> <?php echo esc_html($ticket_number); ?></span>
-                                    <span style="display: block; margin-bottom: 2px;"><strong>Name:</strong> <?php echo esc_html($billing_name); ?></span>
-                                    <span style="display: block; margin-bottom: 2px;"><strong>Customer:</strong> <?php echo esc_html("{$age} ({$nationality})"); ?></span>
-                                    <span style="display: block; margin-bottom: 2px;"><strong>Visit Date:</strong> <?php echo esc_html($visit_date); ?></span>
-                                    <span style="display: block; margin-bottom: 2px;"><strong>Estimated Time of Arrival:</strong> <?php echo esc_html($estimated_time); ?></span>
-                                </div>
-                            </td>
-                            <td style="width: 0.5%"></td>
-
-                            <!-- QR Code -->
-                            <td style="width: 25%; text-align: center; padding: 0;">
-                                <div style="border: 1px solid #525252; border-radius: 5px; padding: 22px 15px;">
-                                    <img src="<?php echo esc_url($qr_url); ?>" alt="QR Code" style="width: 90%; height: auto;">
-                                </div>
-                            </td>
+                            <?php if ($is_left_qr): ?>
+                                <!-- QR Code LEFT -->
+                                <td style="width: 26%; text-align: center; padding: 0;">
+                                    <div style="border: 1px solid #727272ff; border-radius: 5px; padding: 12px;">
+                                        <img src="<?php echo esc_url($qr_url); ?>" alt="QR Code" style="width: 99%; height: auto;">
+                                        <!-- <p style="text-align: center; margin-top: 5px; margin-bottom: 0; font-weight: 700;"><?php echo $qr_text;?></p> -->
+                                    </div>
+                                </td>
+                                <td style="padding: 0;"></td>
+                                <!-- Ticket Info -->
+                                <td style="width: 75%; padding-left: 15px; font-size: 14px;">
+                                    <div style="border: 1px solid #727272ff; border-radius: 5px; padding: 20px 15px;">
+                                        <table style="width: 100%;">
+                                            <tr>
+                                                <td><strong>Booking ID:</strong></td>
+                                                <td style="text-align: right;"><?php echo esc_html($ticket_number); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Ticket Number:</strong></td>
+                                                <td style="text-align: right;"><?php echo $qr_text;?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Name:</strong></td>
+                                                <td style="text-align: right;"><?php echo esc_html($billing_name); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Customer:</strong></td>
+                                                <td style="text-align: right;"><?php echo esc_html("{$age} ({$nationality})"); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Visit Date:</strong></td>
+                                                <td style="text-align: right;"><?php echo esc_html($visit_date); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Estimated Time of Arrival:</strong></td>
+                                                <td style="text-align: right;"><?php echo esc_html($estimated_time); ?></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            <?php else: ?>
+                                <!-- Ticket Info -->
+                                <td style="width: 75%; padding-right: 15px; font-size: 14px;">
+                                    <div style="border: 1px solid #727272ff; border-radius: 5px; padding: 20px 15px;">
+                                        <table style="width: 100%;">
+                                            <tr>
+                                                <td><strong>Booking ID:</strong></td>
+                                                <td style="text-align: right;"><?php echo esc_html($ticket_number); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Ticket Number:</strong></td>
+                                                <td style="text-align: right;"><?php echo $qr_text;?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Name:</strong></td>
+                                                <td style="text-align: right;"><?php echo esc_html($billing_name); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Customer:</strong></td>
+                                                <td style="text-align: right;"><?php echo esc_html("{$age} ({$nationality})"); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Visit Date:</strong></td>
+                                                <td style="text-align: right;"><?php echo esc_html($visit_date); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Estimated Time of Arrival:</strong></td>
+                                                <td style="text-align: right;"><?php echo esc_html($estimated_time); ?></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                                <td style="padding: 0;"></td>
+                                <!-- QR Code RIGHT -->
+                                <td style="width: 26%; text-align: center; padding: 0;">
+                                    <div style="border: 1px solid #727272ff; border-radius: 5px; padding: 12px;">
+                                        <img src="<?php echo esc_url($qr_url); ?>" alt="QR Code" style="width: 99%; height: auto;">
+                                        <!-- <p style="text-align: center; margin-top: 5px; margin-bottom: 0; font-weight: 700;"><?php echo $qr_text;?></p> -->
+                                    </div>
+                                </td>
+                            <?php endif; ?>
                         </tr>
                         <tr>
-                            <td>
-                                <div style="border-bottom: 1px dashed #ccc; padding-top: 25px; width: 100%;"></div>
-                            </td>
-                            <td>
-                                <div style="border-bottom: 1px dashed #ccc; padding-top: 25px; width: 100%;"></div>
-                            </td>
-                            <td>
-                                <div style="border-bottom: 1px dashed #ccc; padding-top: 25px; width: 100%;"></div>
+                            <td colspan="3">
+                                <div style="border-bottom: 2px dashed #727272ff; padding: 5px 20px 20px 20px; width: 94%;"></div>
                             </td>
                         </tr>
                     </table>
@@ -79,6 +139,7 @@ foreach ($order->get_items() as $item) {
                 <?php
                 $ticket_counter++;
             }
+
         }
     }
 }
