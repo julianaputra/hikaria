@@ -164,24 +164,43 @@ add_action('rest_api_init', function () {
 function custom_send_email_endpoint($request) {
     $data = $request->get_json_params();
 
-    if (!$data || !isset($data['customer']['email'])) {
-        return new WP_REST_Response(['message' => 'Invalid data'], 400);
+    if (!$data || !isset($data['customer']['email']) || !isset($data['order']['payment_status'])) {
+        return new WP_REST_Response(['message' => 'Invalid data: missing customer email or payment status.'], 400);
     }
 
     $to = sanitize_email($data['customer']['email']);
-    $subject = 'Your Order Confirmation';
-	
-	$template_path = get_stylesheet_directory() . '/woocommerce/emails/custom-order-template.php';
-	error_log('Template path: ' . $template_path);
+    $booking_id = $data['order']['booking_id'] ?? 'N/A'; // Ambil booking_id untuk subjek
+    $payment_status = $data['order']['payment_status'];
 
-	if (!file_exists($template_path)) {
-		error_log('Template file not found!');
-		return new WP_REST_Response(['message' => 'Email template not found.'], 500);
-	}
+    $template_name = '';
+    $subject = '';
+
+    switch ($payment_status) {
+        case 'payment-success':
+            $template_name = 'custom-order-success-template.php';
+            $subject = 'Your order from Hikaria is on its way! ' . $booking_id;
+            break;
+        case 'order-receive':
+            $template_name = 'custom-order-received-template.php';
+            $subject = 'Your Hikaria order has been received! ' . $booking_id;
+            break;
+        default:
+            // Tangani status pembayaran yang tidak dikenal
+            error_log('Unknown payment status received: ' . $payment_status);
+            return new WP_REST_Response(['message' => 'Unknown payment status provided.'], 400);
+    }
+	
+    $template_path = get_stylesheet_directory() . '/woocommerce/emails/' . $template_name;
+    error_log('Attempting to load template from: ' . $template_path);
+
+    if (!file_exists($template_path)) {
+        error_log('Email template file not found: ' . $template_path);
+        return new WP_REST_Response(['message' => 'Email template not found: ' . $template_name], 500);
+    }
 
     // Gunakan output buffering untuk include template sebagai string
     ob_start();
-    include get_stylesheet_directory() . '/woocommerce/emails/custom-order-template.php';
+    include $template_path; 
     $message = ob_get_clean();
 
     $headers = ['Content-Type: text/html; charset=UTF-8'];
@@ -191,6 +210,7 @@ function custom_send_email_endpoint($request) {
     if ($mail_sent) {
         return new WP_REST_Response(['message' => 'Email sent successfully.'], 200);
     } else {
+        error_log('Failed to send email to ' . $to . ' with subject: ' . $subject);
         return new WP_REST_Response(['message' => 'Failed to send email.'], 500);
     }
 }
